@@ -1,0 +1,20 @@
+== Multi-tenant DataSource
+
+The platform provides a DataSource with _multi-tenant_ support, represented by the  link:{apidir}/com/holonplatform/jdbc/MultiTenantDataSource.html[MultiTenantDataSource^] interface.
+
+This DataSource act as a *wrapper* for concrete `DataSource` implementations, and a new `DataSource` instance is created for each *tenant* which requires a connection. By default, `DataSource` instances a reused, so if an instance was already created for a specific tenant, this one is returned at next tenant connection request.
+
+A `reset()` method is provided to clear the internal per-tenant `DataSource` instance cache. To clear only the cached instance for a specific *tenant id*, the `reset(String tenantId)` method is provided.
+
+Two configured elements are required for the proper operation of a `MultiTenantDataSource`:
+
+. A `TenantResolver` instance, configured at DataSource build time or available in platform `Context` (See link:core.html#Multi-tenancy) to provide the current *tenant id*;
+
+. A link:{apidir}/com/holonplatform/jdbc/TenantDataSourceProvider.html[TenantDataSourceProvider^], which acts a concrete `DataSource` instances provider, configured at DataSource build time or available in platform `Context`.
+
+[source, java]
+----
+include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=multitenant,indent=0]
+----
+<1> Set the `TenantResolver`
+<2> Set the `TenantDataSourceProvider`

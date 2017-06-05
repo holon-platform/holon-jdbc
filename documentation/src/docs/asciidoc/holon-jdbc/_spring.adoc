@@ -1,0 +1,176 @@
+== Spring framework integration
+
+The `holon-jdbc-spring` artifact provides integration with the https://spring.io[Spring^] framework for JDBC `DataSource` building and configuration.
+
+_Maven coordinates_:
+[source, xml, subs="attributes+"]
+----
+<groupId>com.holon-platform.jdbc</groupId>
+<artifactId>holon-jdbc-spring</artifactId>
+<version>{revnumber}</version>
+----
+
+[[EnableDataSource]]
+=== DataSource auto-configuration
+
+The link:{apidir}/com/holonplatform/jdbc/spring/EnableDataSource.html[EnableDataSource^] 
+annotation can be used on Spring configuration classes to enable automatic `DataSource` configuration, using Spring `Environment` property sources to obtain the `DataSource` configuration properties, which must be defined according to the link:{apidir}/com/holonplatform/jdbc/DataSourceConfigProperties.html[DataSourceConfigProperties^] property set.
+
+See <<DataSource configuration properties>> for details.
+
+The _data context id_ to which the `DataSource` configuration is bound can be configured using the `dataContextId()` annotation attribute, useful when is required to configure multiple `DataSource` instances. The _data context id_ will be used as a *suffix* after the configuration property set name (`holon.datasource`) and before the specific property name. 
+For example, if the _data context id_ is `test`, the JDBC connection URL for the `DataSource` must be configured using a property named `holon.datasource.test.url`.
+
+When a _data context id_ is defined, a Spring *qualifier* named the same as the _data context id_ will be associated to the auto-generated `DataSource` bean definitions, and such qualifier can be later used to obtain the right DataSource instance through dependency injection. Each bean definition will be named using the default DataSource bean name (`dataSource`) followed by an underscore and by the _data context id_ name. For example: `dataSource_test`.
+
+For example, given a `datasource.properties` file defined as follows:
+
+[source, text]
+.datasource.properties
+----
+holon.datasource.one.url=jdbc:h2:mem:testdb1
+holon.datasource.one.username=sa
+
+holon.datasource.two.url=jdbc:h2:mem:testdb1
+holon.datasource.two.username=sa
+----
+
+Two `DataSource` will be configured using the two `EnableDataSource` annotations, one bound to the _data context id_ `one` and another 
+bound to the _data context id_ `two`, each qualified with the _data context id_ name:
+
+[source, java]
+----
+include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbcSpring1.java[tag=multiple1,indent=0]
+----
+
+When more than one `DataSource` bean is configured, one of these can be marked as _primary_, meaning that will be the one provided by the Spring context when no specific name or qualifier is specified, using the `primary` boolean configuration property.
+
+For example, using the following configuration properties file:
+
+[source, text]
+.datasource2.properties
+----
+holon.datasource.one.url=jdbc:h2:mem:testdb1
+holon.datasource.one.username=sa
+holon.datasource.one.primary=true
+
+holon.datasource.two.url=jdbc:h2:mem:testdb1
+holon.datasource.two.username=sa
+----
+
+The first `DataSource` can be injected omitting the qualifier:
+
+[source, java]
+----
+include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbcSpring2.java[tag=multiple2,indent=0]
+----
+
+The `EnableDataSource` annotation provides also a `enableTransactionManager()` attribute, that, if set to `true`, automatically registers a JDBC `PlatformTransactionManager` to enable transactions management using Spring's transaction infrastructure (for example to using `Transactional` annotations).
+
+=== Additional configuration properties
+
+The JDBC Spring integration supports a set of additional `DataSource` configuration properties, collected in the link:{apidir}/com/holonplatform/jdbc/spring/SpringDataSourceConfigProperties.html[SpringDataSourceConfigProperties^] interface, which can be used to configure further `DataSource` initialization options.
+
+The available additional configuration properties are listed below:
+
+.Spring DataSource configuration properties
+|===
+|Name |Type |Meaning
+
+|_holon.datasource._ *primary*
+|Boolean (true/false)
+|Marks the DataSource bean as _primary_, meaning that will be the one provided by the Spring context when no specific name or qualifier is specified
+
+|_holon.datasource._ *schema*
+|String
+|Specify the the schema (DDL) script to execute when the DataSource is initialized
+
+| _holon.datasource._ *data*
+|String
+|Specify the the data (DML) script to execute when the DataSource is initialized
+
+|_holon.datasource._ *continue-on-error*
+|Boolean (true/false)
+|Whether to stop schema/data scripts execution if an error occurs
+
+|_holon.datasource._ *separator*
+|String
+|Statement separator in SQL initialization scripts. Default is semicolon.
+
+|_holon.datasource._ *sql-script-encoding*
+|String
+|SQL scripts encoding
+
+|_holon.datasource._ *initialize*
+|Boolean (true/false)
+|Whether to populate the database after DataSource initialization using schema/data scripts (default is true)
+|===
+
+Apart from the primary configuration `property`, all the other properties are related to database initialization through SQL script at `DataSource` configuration time.
+
+If the `initialize` property is set to true (the default) and the script files `schema.sql` and `data.sql` are available from the standard locations (in the root of the classpath), the scripts are executed to initialize the database, in given order.
+The scripts location can be changed using the `schema` and `data` configuration properties.
+
+In addition, the `schema-{platform}`.sql and `data-{platform}`.sql script (if present) are loaded if a database platform is specified using the `platform` configuration property and `{platform}` is the value of such property.
+
+When a _data context id_ is specified, the _data context id_ name will be used as prefix for the default init scripts:  `{datacontextid}-data-*.sql` and `{datacontextid}-data-*.sql`.
+
+== Spring Boot integration
+
+The `holon-jdbc-spring-boot` artifact provides integration with https://projects.spring.io/spring-boot[Spring Boot^] for JDBC `DataSource` auto-configuration.
+
+To enable Spring Boot auto-configuration the following artifact must be included in your project dependencies:
+
+_Maven coordinates_:
+[source, xml, subs="attributes+"]
+----
+<groupId>com.holon-platform.jdbc</groupId>
+<artifactId>holon-jdbc-spring-boot</artifactId>
+<version>{revnumber}</version>
+----
+
+Two auto-configuration features are provided:
+
+*1.* JDBC `DataSource` auto-configuration. This auto-configuration feature is enabled when a Holon DataSource configuration property (`holon.datasource.*`) is detected in Spring context `Environment`, and provides automatic `DataSource` beans registration and configuration following the same strategy adopted by the <<EnableDataSource>> annotation described above.
+
+To disable this auto-configuration feature the `DataSourcesAutoConfiguration` class can be excluded:
+
+[source, java]
+----
+@EnableAutoConfiguration(exclude={DataSourcesAutoConfiguration.class})
+----
+
+*2.* DataSource `PlatformTransactionManager` auto-configuration. This auto-configuration feature is enabled only if a `PlatformTransactionManager` bean is not already registered in Spring context and register a `DataSourceTransactionManager` bean for each `DataSource` registered using the Holon DataSource configuration properties (`holon.datasource.*`).
+
+If a _data context id_ is defined for a `DataSource`, the corresponding `PlatformTransactionManager` will be qualified with the _data context id_ name, and such qualifier can be later used to obtain the right DataSource instance through dependency injection.
+
+To disable this auto-configuration feature the `DataSourcesTransactionManagerAutoConfiguration` class can be excluded:
+
+[source, java]
+----
+@EnableAutoConfiguration(exclude={DataSourcesTransactionManagerAutoConfiguration.class})
+----
+
+=== Spring Boot starters
+
+The following _starter_ artifacts are available to provide a quick project configuration setup using Maven dependency system:
+
+*1.* *Default JDBC starter* provides the dependencies to the Holon JDBC Spring and Spring Boot integration artifacts, in addition to default Holon _core_ Spring Boot starters (see the documentation for further information) and base Spring Boot starter (`spring-boot-starter`):
+
+_Maven coordinates_:
+[source, xml, subs="attributes+"]
+----
+<groupId>com.holon-platform.jdbc</groupId>
+<artifactId>holon-starter-jdbc</artifactId>
+<version>{revnumber}</version>
+----
+
+*2.* *JDBC starter with HikariCP DataSource* provides the same dependencies as the default JDBC starter, adding the https://github.com/brettwooldridge/HikariCP[HikariCP] pooling DataSource dependency. This way, the _HikariCP_ DataSource will be selected by default by the `DataSource` auto-configuration strategy if the type is not explicitly specified using the corresponding configuration property.
+
+_Maven coordinates_:
+[source, xml, subs="attributes+"]
+----
+<groupId>com.holon-platform.jdbc</groupId>
+<artifactId>holon-starter-jdbc-hikaricp</artifactId>
+<version>{revnumber}</version>
+----

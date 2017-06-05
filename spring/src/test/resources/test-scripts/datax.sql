@@ -1,0 +1,3 @@
+INSERT INTO testx VALUES (1, 'One');
+
+COMMIT;

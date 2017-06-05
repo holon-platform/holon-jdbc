@@ -1,0 +1,5 @@
+com.holonplatform.jdbc.internal.factory.BasicDataSourceFactory
+com.holonplatform.jdbc.internal.factory.JNDIDataSourceFactory
+com.holonplatform.jdbc.internal.factory.HikariCPDataSourceFactory
+com.holonplatform.jdbc.internal.factory.DBCP2DataSourceFactory
+com.holonplatform.jdbc.internal.factory.TomcatJdbcDataSourceFactory

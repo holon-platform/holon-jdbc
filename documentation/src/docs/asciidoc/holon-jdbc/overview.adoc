@@ -1,0 +1,43 @@
+= Holon Platform JDBC support
+:revnumber: {project-version}
+:apidir: ../../api/holon-jdbc
+:linkattrs:
+:sectnums:
+:toc: left
+:toclevels: 3
+
+== Introduction
+
+The Holon Platform *JDBC* module provides base JDBC support to the Holon platform, dealing with `javax.sql.DataSource` configuration and providing a _multi-tenant_ DataSource implementation. 
+
+_Maven coordinates_:
+[source, xml, subs="attributes+"]
+----
+<groupId>com.holon-platform.jdbc</groupId>
+<artifactId>holon-jdbc</artifactId>
+<version>{revnumber}</version>
+----
+
+include::holon-jdbc/_datasource.adoc[]
+
+include::holon-jdbc/_multitenant.adoc[]
+
+include::holon-jdbc/_spring.adoc[]
+
+== Maven BOM
+
+A Maven _Bill of materials_ (BOM) artifact which provides all available dependencies for the JDBC module is available:
+
+_Maven coordinates_:
+[source, xml, subs="attributes+"]
+----
+<groupId>com.holon-platform.jdbc</groupId>
+<artifactId>holon-jdbc-bom</artifactId>
+<version>{revnumber}</version>
+----
+
+== Loggers
+
+By default, the Holon platform uses the https://www.slf4j.org[SLF4J^] API for logging. The use of SLF4J is optional: it is enabled when the presence of SLF4J is detected in the classpath. Otherwise, logging will fall back to JUL (`java.util.logging`).
+
+The logger name for the *JDBC* module is `com.holonplatform.jdbc`.

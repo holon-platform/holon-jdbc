@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.holon-platform.jdbc</groupId>
+		<artifactId>holon-jdbc-root</artifactId>
+		<version>5.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>holon-starter-jdbc-hikaricp</artifactId>
+	<packaging>jar</packaging>
+
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>Holon Spring Boot JDBC starter using HikariCP DataSource</description>
+
+	<url>https://holon-platform.com</url>
+
+	<dependencies>
+
+		<!-- Holon base Spring boot stater -->
+		<dependency>
+			<groupId>com.holon-platform.core</groupId>
+			<artifactId>holon-starter</artifactId>
+			<version>${holon.core.version}</version>
+		</dependency>
+
+		<!-- Holon JDBC Spring boot -->
+		<dependency>
+			<groupId>com.holon-platform.jdbc</groupId>
+			<artifactId>holon-jdbc-spring-boot</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- HikariCP Datasource -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikaricp.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+	</dependencies>
+
+</project>
