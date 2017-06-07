@@ -95,7 +95,7 @@ The registration of a `DataSourcePostProcessor` can be accomplished in two ways:
 
 * *Extension services*: The default Java `ServiceLoader` extensions can be used, providing a `com.holonplatform.jdbc.DataSourcePostProcessor` file under a `META-INF/services` folder in classpath, in which to specify the fully qualified name of the `DataSourcePostProcessor` implementation. This way, the post processor is automatically registered when the builder instance is initialized.
 
-[[DataSource configuration properties]]
+[[DataSourceConfigProperties]]
 === DataSource configuration properties
 
 The available `DataSource` configuration properties are collected and represented by the link:{apidir}/com/holonplatform/jdbc/DataSourceConfigProperties.html[DataSourceConfigProperties^] interface, extending a default `ConfigPropertySet` bound to the property name prefix *holon.datasource*.
