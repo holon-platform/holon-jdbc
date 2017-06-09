@@ -23,11 +23,11 @@ _Maven coordinates_:
 <version>{revnumber}</version>
 ----
 
-include::holon-jdbc/_datasource.adoc[]
+include::_datasource.adoc[]
 
-include::holon-jdbc/_multitenant.adoc[]
+include::_multitenant.adoc[]
 
-include::holon-jdbc/_spring.adoc[]
+include::_spring.adoc[]
 
 == Maven BOM
 

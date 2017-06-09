@@ -27,30 +27,6 @@
 				<directory>${project.basedir}/src/docs/asciidoc</directory>
 			</resource>
 		</resources>
-
-		<plugins>
-			<!-- Assembly docs -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<appendAssemblyId>true</appendAssemblyId>
-					<finalName>${project.artifactId}-${project.version}</finalName>
-					<descriptors>
-						<descriptor>src/main/assembly/docs-assembly.xml</descriptor>
-					</descriptors>
-				</configuration>
-				<executions>
-					<execution>
-						<id>assembly-docs</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
 	</build>
 
 	<dependencies>
