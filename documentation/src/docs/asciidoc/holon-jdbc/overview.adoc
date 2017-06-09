@@ -3,6 +3,7 @@
 :apidir: ../../api/holon-jdbc
 :linkattrs:
 :sectnums:
+:nofooter:
 :toc: left
 :toclevels: 3
 
@@ -45,3 +46,10 @@ _Maven coordinates_:
 By default, the Holon platform uses the https://www.slf4j.org[SLF4J^] API for logging. The use of SLF4J is optional: it is enabled when the presence of SLF4J is detected in the classpath. Otherwise, logging will fall back to JUL (`java.util.logging`).
 
 The logger name for the *JDBC* module is `com.holonplatform.jdbc`.
+
+== System requirements
+
+=== Java
+
+The Holon Platform JDBC module requires https://www.java.com[Java] *8* or higher.
+
