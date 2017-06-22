@@ -1,6 +1,6 @@
 = Holon Platform JDBC support
 :revnumber: {project-version}
-:apidir: ../../api/holon-jdbc
+:apidir: ../api/holon-jdbc
 :linkattrs:
 :sectnums:
 :nofooter:
