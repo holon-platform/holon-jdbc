@@ -2,6 +2,14 @@
 
 The Holon platform provides an API to create and configure JDBC `DataSource` instances using a set of configuration properties.
 
+_Maven coordinates_:
+[source, xml, subs="attributes+"]
+----
+<groupId>com.holon-platform.jdbc</groupId>
+<artifactId>holon-jdbc</artifactId>
+<version>{revnumber}</version>
+----
+
 [[DataSourceBuilder]]
 === DataSource builder
 
