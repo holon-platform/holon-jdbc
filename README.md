@@ -1,6 +1,6 @@
 # Holon platform JDBC module
 
-This is the __JDBC__ module of the [Holon Platform](https://holon-platform.com), which provides _Java DataBase Connectivity_ support, dealing with `javax.sql.DataSource` configuration and management in single or multiple persitence source enviroments.
+This is the __JDBC__ module of the [Holon Platform](https://holon-platform.com), which provides _Java DataBase Connectivity_ support, dealing with `javax.sql.DataSource` configuration and management in single or multiple persistence source enviroments.
 
 The module main features are:
 
