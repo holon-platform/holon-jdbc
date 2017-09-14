@@ -61,17 +61,17 @@
 		<holon.core.version>5.0.0-SNAPSHOT</holon.core.version>
 
 		<!-- HikariCP -->
-		<hikaricp.version>2.6.2</hikaricp.version>
+		<hikaricp.version>2.7.1</hikaricp.version>
 		<!-- Commons DBCP -->
 		<commons-dbcp.version>2.1.1</commons-dbcp.version>
 		<!-- Tomcat pool -->
-		<tomcat-jdbc.version>8.5.15</tomcat-jdbc.version>
+		<tomcat-jdbc.version>8.5.20</tomcat-jdbc.version>
 
 		<!-- ByteBuddy -->
-		<bytebuddy.version>1.7.0</bytebuddy.version>
+		<bytebuddy.version>1.7.5</bytebuddy.version>
 
 		<!-- H2 (test) -->
-		<h2.version>1.4.193</h2.version>
+		<h2.version>1.4.196</h2.version>
 
 	</properties>
 
