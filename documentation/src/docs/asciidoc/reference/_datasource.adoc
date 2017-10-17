@@ -95,7 +95,7 @@ The registration of a `DataSourceFactory` can be accomplished in two ways:
 
 ==== DataSourcePostProcessor
 
-The link:{apidir}/com/holonplatform/jdbc/DataSourcePostProcessor.html[DataSourcePostProcessor^] interface can be used to perform additional initialization and configuration on a {@link DataSource} instance created using the `DataSourceBuilder`. The `postProcessDataSource(...)` method is called just after the creation of any DataSource instance. In order to activate a `DataSourcePostProcessor`, it must be registered in the `DataSourceBuilder` instance. The order with wich the post processors are invoked reflect their registration order.
+The link:{apidir}/com/holonplatform/jdbc/DataSourcePostProcessor.html[DataSourcePostProcessor^] interface can be used to perform additional initialization and configuration on a {@link DataSource} instance created using the `DataSourceBuilder`. The `postProcessDataSource(...)` method is called just after the creation of any DataSource instance. In order to activate a `DataSourcePostProcessor`, it must be registered in the `DataSourceBuilder` instance. The order with which the post processors are invoked reflect their registration order.
 
 The registration of a `DataSourcePostProcessor` can be accomplished in two ways:
 
@@ -173,7 +173,7 @@ include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=conf
 
 === Multiple DataSource configuration
 
-When multiple `DataSource` configuration is required and properties are read from the same source, a _data context id_ can be used to discern one `DataSource` configuration property set form another.
+When a multiple `DataSource` configuration is required and properties are read from the same source, a _data context id_ can be used to discern one `DataSource` configuration property set form another.
 
 From the property source point of view, the _data context id_ is used as a *suffix* after the configuration property set name (`holon.datasource`) and before the specific property name.
 

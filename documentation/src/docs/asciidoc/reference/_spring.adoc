@@ -65,7 +65,7 @@ The first `DataSource` can be injected omitting the qualifier:
 include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbcSpring2.java[tag=multiple2,indent=0]
 ----
 
-The `EnableDataSource` annotation provides also a `enableTransactionManager()` attribute, that, if set to `true`, automatically registers a JDBC `PlatformTransactionManager` to enable transactions management using Spring's transaction infrastructure (for example to using `Transactional` annotations).
+The `EnableDataSource` annotation provides also a `enableTransactionManager()` attribute, that, if set to `true`, automatically registers a JDBC `PlatformTransactionManager` to enable transactions management by using Spring's transaction infrastructure (for example to using `Transactional` annotations).
 
 === Additional configuration properties
 
@@ -83,11 +83,11 @@ The available additional configuration properties are listed below:
 
 |_holon.datasource._ *schema*
 |String
-|Specify the the schema (DDL) script to execute when the DataSource is initialized
+|Specifies the the schema (DDL) script to execute when the DataSource is initialized
 
 | _holon.datasource._ *data*
 |String
-|Specify the the data (DML) script to execute when the DataSource is initialized
+|Specifies the the data (DML) script to execute when the DataSource is initialized
 
 |_holon.datasource._ *continue-on-error*
 |Boolean (true/false)
