@@ -65,7 +65,7 @@
 		<!-- Commons DBCP -->
 		<commons-dbcp.version>2.1.1</commons-dbcp.version>
 		<!-- Tomcat pool -->
-		<tomcat-jdbc.version>8.5.20</tomcat-jdbc.version>
+		<tomcat-jdbc.version>8.5.23</tomcat-jdbc.version>
 
 		<!-- ByteBuddy -->
 		<bytebuddy.version>1.7.9</bytebuddy.version>
