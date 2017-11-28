@@ -58,10 +58,10 @@
 		<bintray.package>holon-jdbc</bintray.package>
 
 		<!-- Holon core -->
-		<holon.core.version>5.0.3</holon.core.version>
+		<holon.core.version>5.0.4-SNAPSHOT</holon.core.version>
 
 		<!-- HikariCP -->
-		<hikaricp.version>2.7.2</hikaricp.version>
+		<hikaricp.version>2.7.3</hikaricp.version>
 		<!-- Commons DBCP -->
 		<commons-dbcp.version>2.1.1</commons-dbcp.version>
 		<!-- Tomcat pool -->
