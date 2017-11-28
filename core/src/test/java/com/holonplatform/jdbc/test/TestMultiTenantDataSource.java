@@ -33,6 +33,7 @@ import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.MultiTenantDataSource;
 import com.holonplatform.jdbc.TenantDataSourceProvider;
+import com.holonplatform.jdbc.internal.BasicDataSource;
 
 public class TestMultiTenantDataSource {
 
@@ -130,6 +131,25 @@ public class TestMultiTenantDataSource {
 			}
 
 		});
+
+	}
+
+	@Test
+	public void testContext() {
+
+		final TenantDataSourceProvider tdsp = tenantId -> {
+			if ("test".equals(tenantId)) {
+				return new BasicDataSource();
+			}
+			return null;
+		};
+
+		DataSource ds = Context.get().executeThreadBound(TenantDataSourceProvider.CONTEXT_KEY, tdsp, () -> {
+			return TenantDataSourceProvider.getCurrent().orElseThrow(() -> new IllegalStateException("Missing Realm"))
+					.getDataSource("test");
+		});
+
+		assertNotNull(ds);
 
 	}
 

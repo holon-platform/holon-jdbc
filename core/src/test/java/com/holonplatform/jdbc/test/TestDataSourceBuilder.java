@@ -16,7 +16,7 @@
 package com.holonplatform.jdbc.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 
 import org.junit.Test;
 
+import com.holonplatform.core.internal.utils.ClassUtils;
 import com.holonplatform.core.internal.utils.TestUtils;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
@@ -38,6 +39,13 @@ public class TestDataSourceBuilder {
 	@Test
 	public void testBase() {
 		TestUtils.checkEnum(DatabasePlatform.class);
+		
+		assertNull(DatabasePlatform.fromUrl(null));
+		
+		DatabasePlatform p = DatabasePlatform.fromUrl("jdbc:h2:mem:testdb");
+		assertNotNull(p);
+		assertNotNull(p.getDriverClassName());
+		assertNotNull(p.getXaDriverClassName());
 	}
 
 	@Test
@@ -51,6 +59,7 @@ public class TestDataSourceBuilder {
 		DataSource ds = DataSourceBuilder.create()
 				.build(DataSourceConfigProperties.builder().withPropertySource(props).build());
 		assertEquals(HikariDataSource.class, ds.getClass());
+		
 	}
 
 	@Test
@@ -89,6 +98,21 @@ public class TestDataSourceBuilder {
 	@Test
 	public void testBasicType() throws SQLException {
 		DataSource ds = DataSourceBuilder.create()
+				.build(DataSourceConfigProperties.builder("basic").withPropertySource("test_build.properties").build());
+		assertNotNull(ds);
+
+		assertEquals(BasicDataSource.class, ds.getClass());
+		assertEquals("jdbc:h2:mem:testdb", ((BasicDataSource) ds).getUrl());
+		assertEquals("sa", ((BasicDataSource) ds).getUsername());
+
+		try (Connection c = ds.getConnection()) {
+			assertNotNull(c);
+		}
+	}
+
+	@Test
+	public void testCL() throws SQLException {
+		DataSource ds = DataSourceBuilder.create(ClassUtils.getDefaultClassLoader())
 				.build(DataSourceConfigProperties.builder("basic").withPropertySource("test_build.properties").build());
 		assertNotNull(ds);
 
