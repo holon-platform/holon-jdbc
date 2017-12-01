@@ -1,6 +1,6 @@
-delete from test2;
+delete from itest2;
 
-INSERT INTO test2 VALUES (2, 'Two');
-INSERT INTO test2 VALUES (3, 'Three');
+INSERT INTO itest2 VALUES (2, 'Two');
+INSERT INTO itest2 VALUES (3, 'Three');
 
 COMMIT;

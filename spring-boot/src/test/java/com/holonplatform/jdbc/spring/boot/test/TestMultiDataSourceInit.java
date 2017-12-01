@@ -62,7 +62,7 @@ public class TestMultiDataSourceInit {
 		try (Connection c = dataSource1.getConnection()) {
 			assertNotNull(c);
 
-			try (ResultSet rs = c.createStatement().executeQuery("select count(*) from test1")) {
+			try (ResultSet rs = c.createStatement().executeQuery("select count(*) from itest1")) {
 				boolean hasNext = rs.next();
 				assertTrue(hasNext);
 				long count = rs.getLong(1);
@@ -79,7 +79,7 @@ public class TestMultiDataSourceInit {
 		try (Connection c = dataSource2.getConnection()) {
 			assertNotNull(c);
 
-			try (ResultSet rs = c.createStatement().executeQuery("select count(*) from test2")) {
+			try (ResultSet rs = c.createStatement().executeQuery("select count(*) from itest2")) {
 				boolean hasNext = rs.next();
 				assertTrue(hasNext);
 				long count = rs.getLong(1);

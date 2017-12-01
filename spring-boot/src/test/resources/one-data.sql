@@ -1,5 +1,5 @@
-delete from test1;
+delete from itest1;
 
-INSERT INTO test1 VALUES (1, 'One');
+INSERT INTO itest1 VALUES (1, 'One');
 
 COMMIT;
