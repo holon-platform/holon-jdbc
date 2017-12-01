@@ -28,7 +28,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.holonplatform.jdbc.internal.BasicDataSource;
+import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 import com.holonplatform.jdbc.spring.EnableDataSource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,7 +49,7 @@ public class TestEnableDataSourceBasic {
 
 		assertNotNull(dataSource);
 
-		assertTrue(dataSource instanceof BasicDataSource);
+		assertTrue(dataSource instanceof DefaultBasicDataSource);
 
 	}
 

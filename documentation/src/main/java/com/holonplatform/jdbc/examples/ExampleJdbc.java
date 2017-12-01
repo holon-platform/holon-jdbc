@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.MultiTenantDataSource;
-import com.holonplatform.jdbc.internal.BasicDataSource;
+import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 
 @SuppressWarnings("unused")
 public class ExampleJdbc {
@@ -80,7 +80,7 @@ public class ExampleJdbc {
 	public void multiTenant() throws IOException {
 		// tag::multitenant[]
 		MultiTenantDataSource dataSource = MultiTenantDataSource.builder().resolver(() -> Optional.of("test")) // <1>
-				.provider(tenantId -> new BasicDataSource()) // <2>
+				.provider(tenantId -> new DefaultBasicDataSource()) // <2>
 				.build();
 		// end::multitenant[]
 	}

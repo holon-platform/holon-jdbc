@@ -194,3 +194,20 @@ To build two DataSources, one bound to the `one` configuration property set and 
 ----
 include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=configuration2,indent=0]
 ----
+
+=== BasicDataSource
+
+A link:{apidir}/com/holonplatform/jdbc/BasicDataSource.html[BasicDataSource^] is provided to directly use a simple, standard `javax.sql.DataSource` implementation.
+
+The `BasicDataSource` uses the `java.sql.DriverManager` class and returns a new `java.sql.Connection` from every `getConnection()` call.
+
+For this reason, can be useful for test or standalone environments outside J2EE containers.
+
+A fluent builder is provided to create and configure a `BasicDataSource` instance:
+
+[source, java]
+----
+include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleBasicDataSource.java[tag=basic,indent=0]
+----
+<1> Build a `BasicDataSource` providing driver class name
+<2> Build a `BasicDataSource` using the `DatabasePlatform` enumeration to obtain the driver class name

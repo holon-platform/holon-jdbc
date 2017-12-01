@@ -16,7 +16,8 @@
 package com.holonplatform.jdbc.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -31,7 +32,7 @@ import com.holonplatform.core.internal.utils.TestUtils;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.DatabasePlatform;
-import com.holonplatform.jdbc.internal.BasicDataSource;
+import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class TestDataSourceBuilder {
@@ -39,9 +40,9 @@ public class TestDataSourceBuilder {
 	@Test
 	public void testBase() {
 		TestUtils.checkEnum(DatabasePlatform.class);
-		
+
 		assertNull(DatabasePlatform.fromUrl(null));
-		
+
 		DatabasePlatform p = DatabasePlatform.fromUrl("jdbc:h2:mem:testdb");
 		assertNotNull(p);
 		assertNotNull(p.getDriverClassName());
@@ -59,7 +60,7 @@ public class TestDataSourceBuilder {
 		DataSource ds = DataSourceBuilder.create()
 				.build(DataSourceConfigProperties.builder().withPropertySource(props).build());
 		assertEquals(HikariDataSource.class, ds.getClass());
-		
+
 	}
 
 	@Test
@@ -74,7 +75,7 @@ public class TestDataSourceBuilder {
 
 		DataSource ds = DataSourceBuilder.create()
 				.build(DataSourceConfigProperties.builder().withPropertySource(props).build());
-		assertEquals(BasicDataSource.class, ds.getClass());
+		assertEquals(DefaultBasicDataSource.class, ds.getClass());
 
 		props = new Properties();
 		props.put(DataSourceConfigProperties.DEFAULT_NAME + "." + DataSourceConfigProperties.URL.getKey(),
@@ -101,9 +102,9 @@ public class TestDataSourceBuilder {
 				.build(DataSourceConfigProperties.builder("basic").withPropertySource("test_build.properties").build());
 		assertNotNull(ds);
 
-		assertEquals(BasicDataSource.class, ds.getClass());
-		assertEquals("jdbc:h2:mem:testdb", ((BasicDataSource) ds).getUrl());
-		assertEquals("sa", ((BasicDataSource) ds).getUsername());
+		assertEquals(DefaultBasicDataSource.class, ds.getClass());
+		assertEquals("jdbc:h2:mem:testdb", ((DefaultBasicDataSource) ds).getUrl());
+		assertEquals("sa", ((DefaultBasicDataSource) ds).getUsername());
 
 		try (Connection c = ds.getConnection()) {
 			assertNotNull(c);
@@ -116,9 +117,9 @@ public class TestDataSourceBuilder {
 				.build(DataSourceConfigProperties.builder("basic").withPropertySource("test_build.properties").build());
 		assertNotNull(ds);
 
-		assertEquals(BasicDataSource.class, ds.getClass());
-		assertEquals("jdbc:h2:mem:testdb", ((BasicDataSource) ds).getUrl());
-		assertEquals("sa", ((BasicDataSource) ds).getUsername());
+		assertEquals(DefaultBasicDataSource.class, ds.getClass());
+		assertEquals("jdbc:h2:mem:testdb", ((DefaultBasicDataSource) ds).getUrl());
+		assertEquals("sa", ((DefaultBasicDataSource) ds).getUsername());
 
 		try (Connection c = ds.getConnection()) {
 			assertNotNull(c);

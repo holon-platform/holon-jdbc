@@ -20,15 +20,16 @@ import javax.sql.DataSource;
 
 import com.holonplatform.core.config.ConfigPropertySet.ConfigurationException;
 import com.holonplatform.core.internal.Logger;
+import com.holonplatform.jdbc.BasicDataSource;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.DataSourceFactory;
-import com.holonplatform.jdbc.internal.BasicDataSource;
+import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 import com.holonplatform.jdbc.internal.DefaultDataSourceBuilderConfiguration;
 import com.holonplatform.jdbc.internal.JdbcLogger;
 
 /**
- * A {@link DataSourceFactory} to create {@link BasicDataSource} instances.
+ * A {@link DataSourceFactory} to create {@link DefaultBasicDataSource} instances.
  *
  * @since 5.0.0
  */
@@ -66,7 +67,7 @@ public class BasicDataSourceFactory implements DataSourceFactory {
 					.buildMissingJdbcUrlMessage(getDataSourceType(), dataContextId));
 		}
 
-		final String driverClass = configurationProperties.getConfigPropertyValue(
+		final String driverClassName = configurationProperties.getConfigPropertyValue(
 				DataSourceConfigProperties.DRIVER_CLASS_NAME,
 				configurationProperties.getDriverClassName()
 						.orElseThrow(() -> new ConfigurationException("Cannot auto detect JDBC driver class to use, "
@@ -74,12 +75,10 @@ public class BasicDataSourceFactory implements DataSourceFactory {
 								+ DataSourceConfigProperties.DRIVER_CLASS_NAME.getKey() + " (Data context: "
 								+ dataContextId + ")")));
 
-		BasicDataSource ds = new BasicDataSource();
-		ds.setDriverClassName(driverClass);
-		ds.setUrl(url);
-
-		ds.setUsername(configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.USERNAME, null));
-		ds.setPassword(configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.PASSWORD, null));
+		BasicDataSource ds = BasicDataSource.builder().url(url).driverClassName(driverClassName)
+				.username(configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.USERNAME, null))
+				.password(configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.PASSWORD, null))
+				.build();
 
 		LOGGER.debug(
 				() -> "(Data context id: " + dataContextId + "): " + "BasicDataSource setted up for jdbc url: " + url);

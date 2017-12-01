@@ -15,7 +15,6 @@
  */
 package com.holonplatform.jdbc.internal;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -25,33 +24,16 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 
-import javax.sql.DataSource;
-
 import com.holonplatform.core.internal.Logger;
 import com.holonplatform.core.internal.utils.ObjectUtils;
+import com.holonplatform.jdbc.BasicDataSource;
 
 /**
- * Simple standard jdbc {@link DataSource} implementation, using the {@link java.sql.DriverManager} class and returning
- * a new {@link java.sql.Connection} from every {@code getConnection} call.
- * 
- * <p>
- * This DataSource is configured using standard connection properties and provides methods to set base connection
- * parameters, such as JDBC connection URL, username and password.
- * </p>
- * 
- * <p>
- * Supports setting a specific JDBC Driver. If no specific Driver class is configured, the JDBC DriverManager attempts
- * to select an appropriate driver from the set of registered JDBC drivers.
- * </p>
- * 
- * <p>
- * <b>NOTE: This DataSource does not pool Connections.</b> Can be useful for test or standalone environments outside
- * J2EE containers.
- * </p>
+ * Default {@link BasicDataSource} implementation.
  * 
  * @since 5.0.0
  */
-public class BasicDataSource implements DataSource, Closeable {
+public class DefaultBasicDataSource implements BasicDataSource {
 
 	/*
 	 * Logger
@@ -89,7 +71,10 @@ public class BasicDataSource implements DataSource, Closeable {
 	 * @see java.sql.Driver#connect(String, java.util.Properties)
 	 */
 	public void setUrl(String url) {
-		assert url != null && !url.trim().equals("") : "Property 'url' must not be null or empty";
+		ObjectUtils.argumentNotNull(url, "JDBC url must be not null");
+		if (url.trim().equals("")) {
+			throw new IllegalArgumentException("JDBC url must not be empty");
+		}
 		this.url = url.trim();
 	}
 
@@ -141,7 +126,7 @@ public class BasicDataSource implements DataSource, Closeable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void setDriverClassName(String driverClassName) {
-		assert driverClassName != null : "Property 'driverClassName' must not null";
+		ObjectUtils.argumentNotNull(driverClassName, "Driver class must be not null");
 		try {
 			Class<?> driverClass = Class.forName(driverClassName.trim(), true, getClass().getClassLoader());
 
@@ -349,6 +334,84 @@ public class BasicDataSource implements DataSource, Closeable {
 	 */
 	protected Connection getConnectionFromDriver(String url, Driver driver, Properties properties) throws SQLException {
 		return driver.connect(url, properties);
+	}
+
+	/**
+	 * Default {@link Builder} implementation.
+	 */
+	public static class DefaultBuilder implements Builder {
+
+		private final DefaultBasicDataSource dataSource = new DefaultBasicDataSource();
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.BasicDataSource.Builder#url(java.lang.String)
+		 */
+		@Override
+		public Builder url(String url) {
+			dataSource.setUrl(url);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.BasicDataSource.Builder#username(java.lang.String)
+		 */
+		@Override
+		public Builder username(String username) {
+			dataSource.setUsername(username);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.BasicDataSource.Builder#password(java.lang.String)
+		 */
+		@Override
+		public Builder password(String password) {
+			dataSource.setPassword(password);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.BasicDataSource.Builder#driverClassName(java.lang.String)
+		 */
+		@Override
+		public Builder driverClassName(String driverClassName) {
+			dataSource.setDriverClassName(driverClassName);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.BasicDataSource.Builder#driverClass(java.lang.Class)
+		 */
+		@Override
+		public Builder driverClass(Class<? extends Driver> driverClass) {
+			dataSource.setDriverClass(driverClass);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.BasicDataSource.Builder#connectionProperties(java.util.Properties)
+		 */
+		@Override
+		public Builder connectionProperties(Properties connectionProperties) {
+			dataSource.setConnectionProperties(connectionProperties);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.BasicDataSource.Builder#build()
+		 */
+		@Override
+		public BasicDataSource build() {
+			return dataSource;
+		}
+
 	}
 
 }

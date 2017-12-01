@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.holonplatform.jdbc.internal.BasicDataSource;
+import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 import com.zaxxer.hikari.HikariDataSource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,7 +49,7 @@ public class TestSkipAutoConfig {
 		@Bean(name = "dataSource_one")
 		@Qualifier("custom")
 		public DataSource dataSource() {
-			BasicDataSource ds = new BasicDataSource();
+			DefaultBasicDataSource ds = new DefaultBasicDataSource();
 			ds.setUrl("jdbc:h2:mem:testdb1");
 			ds.setUsername("sa");
 			return ds;
@@ -70,7 +70,7 @@ public class TestSkipAutoConfig {
 		assertNotNull(dataSource1);
 		assertNotNull(dataSource2);
 
-		assertTrue(dataSource1 instanceof BasicDataSource);
+		assertTrue(dataSource1 instanceof DefaultBasicDataSource);
 		assertTrue(dataSource2 instanceof HikariDataSource);
 
 		try (Connection c = dataSource1.getConnection()) {

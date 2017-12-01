@@ -33,7 +33,7 @@ import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.MultiTenantDataSource;
 import com.holonplatform.jdbc.TenantDataSourceProvider;
-import com.holonplatform.jdbc.internal.BasicDataSource;
+import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 
 public class TestMultiTenantDataSource {
 
@@ -139,7 +139,7 @@ public class TestMultiTenantDataSource {
 
 		final TenantDataSourceProvider tdsp = tenantId -> {
 			if ("test".equals(tenantId)) {
-				return new BasicDataSource();
+				return new DefaultBasicDataSource();
 			}
 			return null;
 		};
