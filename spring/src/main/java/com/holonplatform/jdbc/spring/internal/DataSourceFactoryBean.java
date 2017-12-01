@@ -63,7 +63,6 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, BeanClass
 	 */
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		// TODO post processor for init scripts
 		this.dataSourceBuilder = DataSourceBuilder.create(beanClassLoader);
 	}
 

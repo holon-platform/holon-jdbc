@@ -115,6 +115,21 @@ In addition, the `schema-{platform}`.sql and `data-{platform}`.sql script (if pr
 
 When a _data context id_ is specified, the _data context id_ name will be used as prefix for the default init scripts:  `{datacontextid}-data-*.sql` and `{datacontextid}-data-*.sql`.
 
+So, if you configured two DataSources using for example the following properties in the `application.properties` file:
+
+[source, text]
+----
+holon.datasource.one.url=jdbc:h2:mem:testdb1
+holon.datasource.one.username=sa
+holon.datasource.one.password=
+
+holon.datasource.two.url=jdbc:h2:mem:testdb2
+holon.datasource.two.username=sa
+holon.datasource.two.password=
+----
+
+You can provide different initialization scripts for each `DataSource`, i.e. for each _data context id_, named in this example `one` and `two`. For the `one` DataSource you will provide the initialization files `one-schema.sql` and `one-data.sql`, while for the `two` DataSource you will provide the initialization files `two-schema.sql` and `two-data.sql`
+
 == Spring Boot integration
 
 The `holon-jdbc-spring-boot` artifact provides integration with https://projects.spring.io/spring-boot[Spring Boot^] for JDBC `DataSource` auto-configuration.
