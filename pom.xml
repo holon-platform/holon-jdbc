@@ -58,7 +58,7 @@
 		<bintray.package>holon-jdbc</bintray.package>
 
 		<!-- Holon core -->
-		<holon.core.version>5.0.5</holon.core.version>
+		<holon.core.version>5.1.0-SNAPSHOT</holon.core.version>
 
 		<!-- HikariCP -->
 		<hikaricp.version>2.7.4</hikaricp.version>
