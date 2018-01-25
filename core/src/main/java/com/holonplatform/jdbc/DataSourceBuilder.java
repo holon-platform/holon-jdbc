@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 
 import com.holonplatform.core.config.ConfigPropertySet.ConfigurationException;
 import com.holonplatform.core.internal.utils.ClassUtils;
+import com.holonplatform.core.internal.utils.ObjectUtils;
 import com.holonplatform.jdbc.exceptions.DataSourceInitializationException;
 import com.holonplatform.jdbc.internal.DefaultDataSourceBuilder;
 
@@ -128,6 +129,38 @@ public interface DataSourceBuilder {
 	 */
 	static DataSourceBuilder create(ClassLoader classLoader) {
 		return new DefaultDataSourceBuilder(classLoader);
+	}
+
+	/**
+	 * Convenience method to directly build a {@link DataSource} using given DataSource configuration properties file
+	 * name.
+	 * <p>
+	 * See {@link DataSourceConfigProperties} for available DataSource configuration property names and meaning.
+	 * </p>
+	 * @param propertiesFileName DataSource configuration properties file name (not null)
+	 * @return A new {@link DataSource} instance built according to provided configuration properties
+	 * @throws ConfigurationException Error configuring a DataSource using given configuration properties
+	 */
+	static DataSource build(String propertiesFileName) {
+		return build(propertiesFileName, ClassUtils.getDefaultClassLoader());
+	}
+
+	/**
+	 * Convenience method to directly build a {@link DataSource} using given DataSource configuration properties file
+	 * name.
+	 * <p>
+	 * See {@link DataSourceConfigProperties} for available DataSource configuration property names and meaning.
+	 * </p>
+	 * @param propertiesFileName DataSource configuration properties file name (not null)
+	 * @param classLoader The ClassLoader to use to load the file
+	 * @return A new {@link DataSource} instance built according to provided configuration properties
+	 * @throws ConfigurationException Error configuring a DataSource using given configuration properties
+	 */
+	static DataSource build(String propertiesFileName, ClassLoader classLoader) {
+		ObjectUtils.argumentNotNull(propertiesFileName,
+				"DataSource configuration properties file name must be not null");
+		return create(classLoader)
+				.build(DataSourceConfigProperties.builder().withPropertySource(propertiesFileName).build());
 	}
 
 	// ------- Direct builder
