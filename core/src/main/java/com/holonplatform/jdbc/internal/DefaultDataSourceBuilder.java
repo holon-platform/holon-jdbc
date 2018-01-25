@@ -15,12 +15,7 @@
  */
 package com.holonplatform.jdbc.internal;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +34,6 @@ import com.holonplatform.jdbc.DataSourceFactory;
 import com.holonplatform.jdbc.DataSourcePostProcessor;
 import com.holonplatform.jdbc.DataSourceType;
 import com.holonplatform.jdbc.DatabasePlatform;
-import com.holonplatform.jdbc.exceptions.DataSourceInitializationException;
 
 /**
  * Default {@link DataSourceBuilder} implementation.
@@ -351,55 +345,16 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
 		 */
 		@Override
 		public DataSource build() {
-			DataSourceConfigProperties cfg = config.build();
-			final DataSource dataSource = new DefaultDataSourceBuilder(ClassUtils.getDefaultClassLoader()).build(cfg);
+			final DataSource dataSource = new DefaultDataSourceBuilder(ClassUtils.getDefaultClassLoader())
+					.build(config.build());
 
 			// check init scripts
-			for (String sqlScript : sqlScripts) {
-				try (Connection connection = dataSource.getConnection()) {
-					SQLScriptUtils.executeSqlScript(connection, sqlScript);
-				} catch (SQLException | IOException e) {
-					throw new DataSourceInitializationException(
-							"Failed to initialize DataSource using provided SQL scripts", e);
-				}
-			}
-
-			for (String sqlScriptResource : sqlScriptResources) {
-				try (InputStream is = ClassUtils.getDefaultClassLoader().getResourceAsStream(sqlScriptResource)) {
-					if (is == null) {
-						throw new IOException("SQL script not found: " + sqlScriptResource);
-					}
-					String sql = resourceStreamToString(is);
-					if (sql != null) {
-						try (Connection connection = dataSource.getConnection()) {
-							SQLScriptUtils.executeSqlScript(connection, sql);
-						}
-					}
-				} catch (IOException | SQLException e) {
-					throw new DataSourceInitializationException(
-							"Failed to initialize DataSource using provided SQL scripts", e);
-				}
-			}
+			DataSourceInitializer.initDataSourceFromSQL(dataSource, sqlScripts);
+			DataSourceInitializer.initDataSourceFromSQLResources(dataSource, sqlScriptResources);
 
 			return dataSource;
 		}
 
-	}
-
-	/**
-	 * Get given InputStream as a UTF-8 encoded String.
-	 * @param is InputStream (not null)
-	 * @return The UTF-8 encoded String
-	 * @throws IOException If a read error occurred
-	 */
-	private static String resourceStreamToString(InputStream is) throws IOException {
-		ByteArrayOutputStream result = new ByteArrayOutputStream();
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((length = is.read(buffer)) != -1) {
-			result.write(buffer, 0, length);
-		}
-		return result.toString("UTF-8");
 	}
 
 }
