@@ -25,8 +25,9 @@ import com.holonplatform.core.internal.Logger;
 import com.holonplatform.core.internal.utils.ObjectUtils;
 
 /**
- * @author BODSI08
+ * Utility class to execute a SQL script.
  *
+ * @since 5.1.0
  */
 public class SQLScriptUtils {
 
@@ -52,6 +53,12 @@ public class SQLScriptUtils {
 	 */
 	private static final String BLOCK_COMMENT_END = "*/";
 
+	/**
+	 * Execute given SQL script using provided {@link Connection}.
+	 * @param connection Connection on which to execute the script (not null)
+	 * @param script SQL script not null
+	 * @throws IOException If an execution error occurred
+	 */
 	public static void executeSqlScript(Connection connection, String script) throws IOException {
 
 		ObjectUtils.argumentNotNull(connection, "Connection must be not null");
@@ -87,7 +94,7 @@ public class SQLScriptUtils {
 	 * @return the individual statements
 	 * @throws IOException if an error occurred
 	 */
-	public static List<String> splitSql(String script) throws IOException {
+	private static List<String> splitSql(String script) throws IOException {
 
 		final List<String> statements = new ArrayList<>();
 
@@ -96,7 +103,7 @@ public class SQLScriptUtils {
 		boolean inSingleQuote = false;
 		boolean inDoubleQuote = false;
 		boolean inEscape = false;
-		
+
 		for (int i = 0; i < script.length(); i++) {
 			char c = script.charAt(i);
 			if (inEscape) {
@@ -114,7 +121,7 @@ public class SQLScriptUtils {
 			} else if (!inSingleQuote && (c == '"')) {
 				inDoubleQuote = !inDoubleQuote;
 			}
-			
+
 			if (!inSingleQuote && !inDoubleQuote) {
 				if (script.startsWith(STATEMENT_SEPARATOR, i)) {
 					// end of statement
