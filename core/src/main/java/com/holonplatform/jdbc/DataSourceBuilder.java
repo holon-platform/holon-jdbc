@@ -233,7 +233,7 @@ public interface DataSourceBuilder {
 		Builder validationQuery(String validationQuery);
 
 		/**
-		 * Execute given SQL intitialization script.
+		 * Add a SQL intitialization script.
 		 * <p>
 		 * Supported SQL scripts format:
 		 * <ul>
@@ -245,10 +245,10 @@ public interface DataSourceBuilder {
 		 * @param sqlScript SQL intitialization script (not null)
 		 * @return this
 		 */
-		Builder initScript(String sqlScript);
+		Builder withInitScript(String sqlScript);
 
 		/**
-		 * Execute the SQL intitialization script read from given classpath resource name (for example a file name).
+		 * Add a SQL intitialization script read from given classpath resource name (for example a file name).
 		 * {@link ClassLoader#getResourceAsStream(String)} is used to load the resource, using the same conventions to
 		 * locate the resource to load. UTF-8 is assumed as default encoding.
 		 * <p>
@@ -262,7 +262,7 @@ public interface DataSourceBuilder {
 		 * @param sqlScriptFile SQL script resource name
 		 * @return this
 		 */
-		Builder initScriptResource(String sqlScriptResourceName);
+		Builder withInitScriptResource(String sqlScriptResourceName);
 
 		/**
 		 * Build the {@link DataSource}.

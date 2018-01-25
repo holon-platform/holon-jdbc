@@ -197,9 +197,9 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
 		private final ConfigPropertySet.Builder<DataSourceConfigProperties> config = DataSourceConfigProperties
 				.builder();
 
-		private String sqlScript;
+		private List<String> sqlScripts = new LinkedList<>();
 
-		private String sqlScriptResource;
+		private List<String> sqlScriptResources = new LinkedList<>();
 
 		/*
 		 * (non-Javadoc)
@@ -325,23 +325,23 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
 
 		/*
 		 * (non-Javadoc)
-		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#initScript(java.lang.String)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#withInitScript(java.lang.String)
 		 */
 		@Override
-		public Builder initScript(String sqlScript) {
+		public Builder withInitScript(String sqlScript) {
 			ObjectUtils.argumentNotNull(sqlScript, "SQL script must be not null");
-			this.sqlScript = sqlScript;
+			this.sqlScripts.add(sqlScript);
 			return this;
 		}
 
 		/*
 		 * (non-Javadoc)
-		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#initScriptResource(java.lang.String)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#withInitScriptResource(java.lang.String)
 		 */
 		@Override
-		public Builder initScriptResource(String sqlScriptResourceName) {
+		public Builder withInitScriptResource(String sqlScriptResourceName) {
 			ObjectUtils.argumentNotNull(sqlScriptResourceName, "SQL script resource name must be not null");
-			this.sqlScriptResource = sqlScriptResourceName;
+			this.sqlScriptResources.add(sqlScriptResourceName);
 			return this;
 		}
 
@@ -355,7 +355,7 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
 			final DataSource dataSource = new DefaultDataSourceBuilder(ClassUtils.getDefaultClassLoader()).build(cfg);
 
 			// check init scripts
-			if (sqlScript != null && !sqlScript.trim().equals("")) {
+			for (String sqlScript : sqlScripts) {
 				try (Connection connection = dataSource.getConnection()) {
 					SQLScriptUtils.executeSqlScript(connection, sqlScript);
 				} catch (SQLException | IOException e) {
@@ -364,7 +364,7 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
 				}
 			}
 
-			if (sqlScriptResource != null) {
+			for (String sqlScriptResource : sqlScriptResources) {
 				try (InputStream is = ClassUtils.getDefaultClassLoader().getResourceAsStream(sqlScriptResource)) {
 					if (is == null) {
 						throw new IOException("SQL script not found: " + sqlScriptResource);
