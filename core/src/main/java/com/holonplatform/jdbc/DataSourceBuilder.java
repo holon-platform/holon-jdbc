@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 
 import com.holonplatform.core.config.ConfigPropertySet.ConfigurationException;
 import com.holonplatform.core.internal.utils.ClassUtils;
+import com.holonplatform.jdbc.exceptions.DataSourceInitializationException;
 import com.holonplatform.jdbc.internal.DefaultDataSourceBuilder;
 
 /**
@@ -127,6 +128,150 @@ public interface DataSourceBuilder {
 	 */
 	static DataSourceBuilder create(ClassLoader classLoader) {
 		return new DefaultDataSourceBuilder(classLoader);
+	}
+
+	// ------- Direct builder
+
+	/**
+	 * Get a {@link Builder} to set configuration properties and directly obtain a {@link DataSource} instance.
+	 * @return A new {@link DataSource} builder
+	 */
+	static Builder builder() {
+		return new DefaultDataSourceBuilder.DefaultBuilder();
+	}
+
+	/**
+	 * Direct {@link DataSource} instance builder.
+	 */
+	public interface Builder {
+
+		/**
+		 * Set the DataSource type name.
+		 * @param typeName the DataSource type name (not null)
+		 * @return this
+		 */
+		Builder type(String typeName);
+
+		/**
+		 * Set the DataSource type.
+		 * @param type the DataSource type (not null)
+		 * @return this
+		 */
+		Builder type(DataSourceType type);
+
+		/**
+		 * Set the DataSource instance name, if supported by concrete DataSource implementation.
+		 * @param name the DataSource name
+		 * @return this
+		 */
+		Builder name(String name);
+
+		/**
+		 * Set the JDBC driver class name.
+		 * @param driverClassName the JDBC driver class name
+		 * @return this
+		 */
+		Builder driverClassName(String driverClassName);
+
+		/**
+		 * Set the JDBC connection URL.
+		 * @param url the JDBC connection URL
+		 * @return this
+		 */
+		Builder url(String url);
+
+		/**
+		 * Set the JDBC connection username.
+		 * @param username the JDBC connection username
+		 * @return this
+		 */
+		Builder username(String username);
+
+		/**
+		 * Set the JDBC connection password.
+		 * @param password the JDBC connection password
+		 * @return this
+		 */
+		Builder password(String password);
+
+		/**
+		 * Set the database platform to which the DataSource is connected.
+		 * <p>
+		 * Can be used for example to auto-detect a suitable JDBC driver.
+		 * </p>
+		 * @param databasePlatform the database platform
+		 * @return this
+		 */
+		Builder database(DatabasePlatform databasePlatform);
+
+		/**
+		 * Set the DataSource connection auto-commit mode.
+		 * @param autoCommit <code>true</code> to enable connection auto-commit, <code>false</code> to disable
+		 * @return this
+		 */
+		Builder autoCommit(boolean autoCommit);
+
+		/**
+		 * For connection pooling DataSources, set the lower limit of the connections pool.
+		 * @param minPoolSize Minimum connection pool size
+		 * @return this
+		 */
+		Builder minPoolSize(int minPoolSize);
+
+		/**
+		 * For connection pooling DataSources, set the upper limit of the connections pool.
+		 * @param minPoolSize Maximum connection pool size
+		 * @return this
+		 */
+		Builder maxPoolSize(int maxPoolSize);
+
+		/**
+		 * For connection pooling DataSources, set the connection validation query.
+		 * @param validationQuery the connection validation query
+		 * @return this
+		 */
+		Builder validationQuery(String validationQuery);
+
+		/**
+		 * Execute given SQL intitialization script.
+		 * <p>
+		 * Supported SQL scripts format:
+		 * <ul>
+		 * <li>The semicolon punctuation mark (<code>;</code>) must be used as SQL statements separator</li>
+		 * <li>Single line comments must be prefixed by <code>--</code></li>
+		 * <li>Block comments must be delimited by <code>&#92;*</code> and <code>*&#47;</code></li>
+		 * </ul>
+		 * </p>
+		 * @param sqlScript SQL intitialization script (not null)
+		 * @return this
+		 */
+		Builder initScript(String sqlScript);
+
+		/**
+		 * Execute the SQL intitialization script read from given classpath resource name (for example a file name).
+		 * {@link ClassLoader#getResourceAsStream(String)} is used to load the resource, using the same conventions to
+		 * locate the resource to load. UTF-8 is assumed as default encoding.
+		 * <p>
+		 * Supported SQL scripts format:
+		 * <ul>
+		 * <li>The semicolon punctuation mark (<code>;</code>) must be used as SQL statements separator</li>
+		 * <li>Single line comments must be prefixed by <code>--</code></li>
+		 * <li>Block comments must be delimited by <code>&#92;*</code> and <code>*&#47;</code></li>
+		 * </ul>
+		 * </p>
+		 * @param sqlScriptFile SQL script resource name
+		 * @return this
+		 */
+		Builder initScriptResource(String sqlScriptResourceName);
+
+		/**
+		 * Build the {@link DataSource}.
+		 * @return the {@link DataSource} instance
+		 * @throws DataSourceInitializationException If a {@link DataSource} initialization error occurs, for example an
+		 *         error in SQL initialization scripts execution
+		 */
+		DataSource build();
+
 	}
 
 }
