@@ -96,6 +96,7 @@ public class SQLScriptUtils {
 		boolean inSingleQuote = false;
 		boolean inDoubleQuote = false;
 		boolean inEscape = false;
+		
 		for (int i = 0; i < script.length(); i++) {
 			char c = script.charAt(i);
 			if (inEscape) {
@@ -113,8 +114,8 @@ public class SQLScriptUtils {
 			} else if (!inSingleQuote && (c == '"')) {
 				inDoubleQuote = !inDoubleQuote;
 			}
+			
 			if (!inSingleQuote && !inDoubleQuote) {
-
 				if (script.startsWith(STATEMENT_SEPARATOR, i)) {
 					// end of statement
 					if (sb.length() > 0) {
@@ -125,9 +126,9 @@ public class SQLScriptUtils {
 					continue;
 				} else if (script.startsWith(COMMENT_PREFIX, i)) {
 					// single line comment
-					int indexOfNextNewline = script.indexOf("\n", i);
-					if (indexOfNextNewline > i) {
-						i = indexOfNextNewline;
+					int nlIdx = script.indexOf("\n", i);
+					if (nlIdx > i) {
+						i = nlIdx;
 						continue;
 					} else {
 						break;
