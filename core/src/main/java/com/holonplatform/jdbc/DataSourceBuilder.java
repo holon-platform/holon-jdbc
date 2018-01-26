@@ -253,7 +253,7 @@ public interface DataSourceBuilder {
 
 		/**
 		 * For connection pooling DataSources, set the upper limit of the connections pool.
-		 * @param minPoolSize Maximum connection pool size
+		 * @param maxPoolSize Maximum connection pool size
 		 * @return this
 		 */
 		Builder maxPoolSize(int maxPoolSize);
@@ -274,7 +274,6 @@ public interface DataSourceBuilder {
 		 * <li>Single line comments must be prefixed by <code>--</code></li>
 		 * <li>Block comments must be delimited by <code>&#92;*</code> and <code>*&#47;</code></li>
 		 * </ul>
-		 * </p>
 		 * @param sqlScript SQL intitialization script (not null)
 		 * @return this
 		 */
@@ -291,8 +290,7 @@ public interface DataSourceBuilder {
 		 * <li>Single line comments must be prefixed by <code>--</code></li>
 		 * <li>Block comments must be delimited by <code>&#92;*</code> and <code>*&#47;</code></li>
 		 * </ul>
-		 * </p>
-		 * @param sqlScriptFile SQL script resource name
+		 * @param sqlScriptResourceName SQL script resource name
 		 * @return this
 		 */
 		Builder withInitScriptResource(String sqlScriptResourceName);

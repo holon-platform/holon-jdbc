@@ -45,8 +45,10 @@ public class DefaultJdbcConnectionHandler implements JdbcConnectionHandler {
 		return connection;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.holonplatform.jdbc.JdbcConnectionHandler#releaseConnection(java.sql.Connection, javax.sql.DataSource, com.holonplatform.jdbc.JdbcConnectionHandler.ConnectionType)
+	/*
+	 * (non-Javadoc)
+	 * @see com.holonplatform.jdbc.JdbcConnectionHandler#releaseConnection(java.sql.Connection, javax.sql.DataSource,
+	 * com.holonplatform.jdbc.JdbcConnectionHandler.ConnectionType)
 	 */
 	@Override
 	public void releaseConnection(Connection connection, DataSource dataSource, ConnectionType connectionType)
