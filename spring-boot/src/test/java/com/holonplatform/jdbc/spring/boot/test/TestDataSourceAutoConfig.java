@@ -16,8 +16,10 @@
 package com.holonplatform.jdbc.spring.boot.test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
@@ -60,7 +62,9 @@ public class TestDataSourceAutoConfig {
 		try (Connection c = dataSource1.getConnection()) {
 			assertNotNull(c);
 
-			c.createStatement().executeQuery("select count(*) from test1");
+			try (ResultSet rs = c.createStatement().executeQuery("select count(*) from test1")) {
+				assertTrue(rs.next());
+			}
 		}
 	}
 
@@ -72,7 +76,9 @@ public class TestDataSourceAutoConfig {
 		try (Connection c = dataSource2.getConnection()) {
 			assertNotNull(c);
 
-			c.createStatement().executeQuery("select count(*) from test2");
+			try (ResultSet rs = c.createStatement().executeQuery("select count(*) from test2")) {
+				assertTrue(rs.next());
+			}
 		}
 	}
 

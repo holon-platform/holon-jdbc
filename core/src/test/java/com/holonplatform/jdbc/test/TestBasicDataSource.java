@@ -16,8 +16,10 @@
 package com.holonplatform.jdbc.test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
@@ -38,7 +40,9 @@ public class TestBasicDataSource {
 
 		try (Connection connection = dataSource.getConnection()) {
 			assertNotNull(connection);
-			connection.createStatement().executeQuery("SELECT 1");
+			try (ResultSet rs = connection.createStatement().executeQuery("SELECT 1")) {
+				assertTrue(rs.next());
+			}
 		}
 
 		dataSource = BasicDataSource.builder().url("jdbc:h2:mem:testdb").username("sa").database(DatabasePlatform.H2)
@@ -46,7 +50,9 @@ public class TestBasicDataSource {
 
 		try (Connection connection = dataSource.getConnection()) {
 			assertNotNull(connection);
-			connection.createStatement().executeQuery("SELECT 1");
+			try (ResultSet rs = connection.createStatement().executeQuery("SELECT 1")) {
+				assertTrue(rs.next());
+			}
 		}
 
 	}

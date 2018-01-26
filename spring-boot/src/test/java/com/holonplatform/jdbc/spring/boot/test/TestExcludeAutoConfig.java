@@ -15,9 +15,11 @@
  */
 package com.holonplatform.jdbc.spring.boot.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
@@ -57,7 +59,9 @@ public class TestExcludeAutoConfig {
 		try (Connection c = dataSource.getConnection()) {
 			assertNotNull(c);
 
-			c.createStatement().executeQuery("select count(*) from test");
+			try (ResultSet rs = c.createStatement().executeQuery("select count(*) from test")) {
+				assertTrue(rs.next());
+			}
 		}
 	}
 
