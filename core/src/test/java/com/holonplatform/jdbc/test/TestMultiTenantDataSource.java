@@ -49,10 +49,10 @@ public class TestMultiTenantDataSource {
 						"jdbc:h2:mem:testdbt1;INIT=RUNSCRIPT FROM 'classpath:scripts/db1.sql'");
 			} else if ("T2".equals(tenantId)) {
 				properties.put("holon.datasource.url",
-						"jdbc:h2:mem:testdbt1;INIT=RUNSCRIPT FROM 'classpath:scripts/db2.sql'");
+						"jdbc:h2:mem:testdbt2;INIT=RUNSCRIPT FROM 'classpath:scripts/db2.sql'");
 			} else {
 				properties.put("holon.datasource.url",
-						"jdbc:h2:mem:testdbt1;INIT=RUNSCRIPT FROM 'classpath:scripts/db3.sql'");
+						"jdbc:h2:mem:testdbt3;INIT=RUNSCRIPT FROM 'classpath:scripts/db3.sql'");
 			}
 
 			return DataSourceBuilder.create()
