@@ -1,4 +1,6 @@
-= Holon Platform JDBC support
+= Holon Platform JDBC Module - Reference manual
+:description: Holon platform JDBC module reference documentation. \
+The JDBC module provides Java DataBase Connectivity (JDBC) support, dealing with DataSource configuration and management in single or multiple persistence source enviroments and DataSource configuration in a Spring context, including the Spring Boot support.
 :revnumber: {project-version}
 :apidir: ../api/holon-jdbc
 :linkattrs:
@@ -14,6 +16,19 @@ _Copies of this document may be made for your own use and for distribution to ot
 == Introduction
 
 The Holon Platform *JDBC* module provides base JDBC support to the Holon platform, dealing with `javax.sql.DataSource` configuration and providing a _multi-tenant_ DataSource implementation. 
+
+Futhermore, the module provides integration with the *Spring* framework relatively to `DataSource` configuration and `DataSource` auto-configuration facilities using *Spring Boot*.
+
+=== Sources and contributions
+
+The Holon Platform *JDBC* module source code is available from the GitHub repository link:https://github.com/holon-platform/holon-jdbc[https://github.com/holon-platform/holon-jdbc^].
+
+See the repository `README` file for information about:
+
+* The source code structure.
+* How to build the module artifacts from sources.
+* Where to find the code examples.
+* How to contribute to the module development.
 
 == Obtaining the artifacts
 

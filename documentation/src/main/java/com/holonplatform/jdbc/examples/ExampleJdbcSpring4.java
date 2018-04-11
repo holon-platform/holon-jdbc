@@ -23,29 +23,29 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.holonplatform.jdbc.spring.EnableDataSource;
+import com.holonplatform.spring.PrimaryMode;
 
-public class ExampleJdbcSpring2 {
+@SuppressWarnings("unused")
+public class ExampleJdbcSpring4 {
 
+	static
 	// tag::config[]
-	@Configuration
-	@PropertySource("datasource.properties")
-	static class Config {
+	@Configuration @PropertySource("datasource.properties") class Config {
 
 		@Configuration
-		@EnableDataSource(dataContextId = "one") // <1>
+		@EnableDataSource(dataContextId = "one", primary = PrimaryMode.TRUE) // <1>
 		static class Config1 {
 		}
 
 		@Configuration
-		@EnableDataSource(dataContextId = "two") // <2>
+		@EnableDataSource(dataContextId = "two")
 		static class Config2 {
 		}
 
 	}
 
 	@Autowired
-	@Qualifier("one") // <3>
-	private DataSource dataSource1;
+	private DataSource dataSource1; // <2>
 
 	@Autowired
 	@Qualifier("two")

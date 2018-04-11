@@ -1,6 +1,5 @@
-== JDBC DataSource configuration
-
-The Holon platform provides an API to create and configure JDBC `DataSource` instances using a set of configuration properties.
+[[DataSourceConfiguration]]
+== JDBC DataSource creation and configuration
 
 _Maven coordinates_:
 [source, xml, subs="attributes+"]
@@ -10,117 +9,31 @@ _Maven coordinates_:
 <version>{revnumber}</version>
 ----
 
-[[DataSourceBuilder]]
-=== DataSource builder
+The Holon platform JDBC module provides an API to create and configure JDBC `DataSource` instances using a set of configuration properties.
 
-The link:{apidir}/com/holonplatform/jdbc/DataSourceBuilder.html[DataSourceBuilder^] interface can be used to build `DataSource` instances using a `DataSourceConfigProperties` instance as configuration property source, using the `build(DataSourceConfigProperties configurationProperties)` method.
+The link:{apidir}/com/holonplatform/jdbc/DataSourceBuilder.html[DataSourceBuilder^] API can be used to build `DataSource` instances using a set of configuration properties, represented by the `DataSourceConfigProperties` property set.
 
-The default `DataSourceBuilder` implementation, which can be obtained through the `create()` interface static methods, relies on the `type` configuration property to define the concrete `DataSource` instance to create and configure.
-
-The following types are supported by default:
-
-* `com.holonplatform.jdbc.BasicDataSource`: Create `BasicDataSource` instances, to be used typically for testing purposes. It is a simple `DataSource` implementation, using the `java.sql.DriverManager` class and returning a new
-`java.sql.Connection` from every `getConnection` call.
-
-* `com.zaxxer.hikari.HikariDataSource`: Create https://github.com/brettwooldridge/HikariCP[HikariCP] connection pooling `DataSource` instances. The _HikariCP_ library dependency must be available in classpath. All default configuration properties are supported, and additional Hikari-specific configuration properties can be specified using the `hikari` prefix before the actual property name, for example: `holon.datasource.*hikari*.connectionTimeout`.
-
-* `org.apache.commons.dbcp2.BasicDataSource`: Create http://commons.apache.org/proper/commons-dbcp/[Apache Commons DBCP 2] connection pooling `DataSource` instances. The _DBCP 2_ library dependency must be available in classpath. All default configuration properties are supported, and additional DBCP-specific configuration properties can be specified using the `dbcp` prefix before the actual property name, for example: `holon.datasource.*dbcp*.maxWaitMillis`.
-
-* `org.apache.tomcat.jdbc.pool.DataSource`: Create https://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html[Tomcat JDBC] connection pooling `DataSource` instances. The _tomcat-jdbc_ library dependency must be available in classpath. All default configuration properties are supported, and additional Tomcat-specific configuration properties can be specified using the `tomcat` prefix before the actual property name, for example: `holon.datasource.*tomcat*.maxAge`.
-
-* `JNDI`: Obtain a `DataSource` using *JNDI*. The `jndi-name` configuration property is required to specify the JNDI name to which the `DataSource` is bound in the JNDI context.
-
-==== Default DataSource type selection strategy
-
-If the `type` configuration property is not specified, the default DataSource `type` selection strategy adopted by the `DataSourceBuilder` is defined as follows:
-
-. If the https://github.com/brettwooldridge/HikariCP[HikariCP] dependecy is present in classpath, the `com.zaxxer.hikari.HikariDataSource` type will be used;
-. If the http://commons.apache.org/proper/commons-dbcp/[Apache Commons DBCP 2] dependecy is present in classpath, the `org.apache.commons.dbcp2.BasicDataSource` type will be used;
-. If the https://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html[Tomcat JDBC] dependecy is present in classpath, the `org.apache.tomcat.jdbc.pool.DataSource` type will be used;
-. Otherwise, the `com.holonplatform.jdbc.BasicDataSource` type is used as fallback.
-
-For example, using the following configuration properties file:
-
-[source, text]
-.datasource.properties
-----
-holon.datasource.url=jdbc:h2:mem:testdb
-holon.datasource.username=sa
-holon.datasource.password=
-----
-
-The `DataSourceBuilder` can be used as follows, creating a DataSource of a type determined according to the default type selection strategy:
-
-[source, java]
-----
-include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=builder,indent=0]
-----
-<1> Create a configuration property set using the `datasource.properties` as property source
-<2> Build a `DataSource` instance according to given configuration properties
-
-To specify the `DataSource` type to create, the `type` property can be used. For example, to use https://github.com/brettwooldridge/HikariCP[HikariCP] pooling DataSource:
-
-[source, text]
-.datasource2.properties
-----
-holon.datasource.url=jdbc:h2:mem:testdb
-holon.datasource.username=sa
-holon.datasource.password=
-
-holon.datasource.type=com.zaxxer.hikari.HikariDataSource
-----
-
-The `DataSourceBuilder` is used the same as before:
-
-[source, java]
-----
-include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=builder2,indent=0]
-----
-<1> Create a configuration property set using the `datasource2.properties` as property source
-<2> Build a `DataSource` instance according to given configuration properties, which will be an `HikariDataSource` instance
-
-WARNING: In order to create `HikariDataSource` instances, the HikariCP library must be present in classpath. Similarly, to create Tomcat JDBC pooling DataSources, the Tomcat JDBC library must be present in classpath.
-
-==== DataSourceFactory
-
-The default `DataSourceBuilder` implementation delegates `DataSource` instances creation to  link:{apidir}/com/holonplatform/jdbc/DataSourceFactory.html[DataSourceFactory^] interface implementation, each of them bound to a single `DataSource` *type* name, which must be registered in the `DataSourceBuilder`.
-
-A `DataSourceFactory` can be used to provide additional `DataSource` types support or to replace a default type creation strategy with a new one. The `DataSource` type name to which the `DataSourceFactory` is bound is provided by the `getDataSourceType()` interface method.
-
-The registration of a `DataSourceFactory` can be accomplished in two ways:
-
-* *Direct registration*: A `DataSourceFactory` instance can directly registered in a `DataSourceBuilder` instance using the `registerFactory(DataSourceFactory factory)` method. Any previous binding with given type will be replaced by the given factory.
-
-* *Extension services*: The default Java `ServiceLoader` extensions can be used, providing a `com.holonplatform.jdbc.DataSourceFactory` file under a `META-INF/services` folder in classpath, in which to specify the fully qualified name of the `DataSourceFactory` implementation. This way, the factory is automatically registered when the builder instance is initialized.
-
-==== DataSourcePostProcessor
-
-The link:{apidir}/com/holonplatform/jdbc/DataSourcePostProcessor.html[DataSourcePostProcessor^] interface can be used to perform additional initialization and configuration on a {@link DataSource} instance created using the `DataSourceBuilder`. The `postProcessDataSource(...)` method is called just after the creation of any DataSource instance. In order to activate a `DataSourcePostProcessor`, it must be registered in the `DataSourceBuilder` instance. The order with which the post processors are invoked reflect their registration order.
-
-The registration of a `DataSourcePostProcessor` can be accomplished in two ways:
-
-* *Direct registration*: A `DataSourcePostProcessor` instance can directly registered in a `DataSourceBuilder` instance using the `registerPostProcessor(DataSourcePostProcessor postProcessor)` method.
-
-* *Extension services*: The default Java `ServiceLoader` extensions can be used, providing a `com.holonplatform.jdbc.DataSourcePostProcessor` file under a `META-INF/services` folder in classpath, in which to specify the fully qualified name of the `DataSourcePostProcessor` implementation. This way, the post processor is automatically registered when the builder instance is initialized.
+See the next sections to learn how to use the DataSource builder API to create JDBC `DataSource` instances.
 
 [[DataSourceConfigProperties]]
 === DataSource configuration properties
 
-The available `DataSource` configuration properties are collected and represented by the link:{apidir}/com/holonplatform/jdbc/DataSourceConfigProperties.html[DataSourceConfigProperties^] interface, extending a default `ConfigPropertySet` bound to the property name prefix *holon.datasource*.
+The `DataSource` configuration properties are available from the link:{apidir}/com/holonplatform/jdbc/DataSourceConfigProperties.html[DataSourceConfigProperties^] interface, which is a standard link:holon-core.html#ConfigPropertySet[ConfigPropertySet^] API and allows to obtain the configuration property set values from different sources.
+
+The `DataSourceConfigProperties` property set name prefix is *holon.datasource*.
 
 The available configuration properties are listed below:
 
-.DataSource configuration properties
 |===
 |Name |Type |Meaning
 
 |_holon.datasource._ *type*
 |String
-|DataSource type name. 
+|DataSource type: see <<DataSourceType>>
 
 |_holon.datasource._ *driver-class-name*
 |String
-|The JDBC Driver class name to use. If not specified, the default DataSource builder tries to auto-detect it form the connection URL.
+|The JDBC Driver class name to use. If not specified, the default DataSource builder tries to auto-detect it form the connection URL
 
 | _holon.datasource._ *url*
 |String
@@ -136,30 +49,30 @@ The available configuration properties are listed below:
 
 |_holon.datasource._ *platform*
 |`DatabasePlatform` enumeration
-|Database platform to which the DataSource is connected. If not specified, the DataSource builder tries to auto-detect it form the connection URL.
+|Database platform to which the DataSource is connected. If not specified, the DataSource builder tries to auto-detect it form the connection URL
 
 |_holon.datasource._ *auto-commit*
 |Boolean (`true` / `false`)
-|Enable/Disable auto-commit for the JDBC driver
+|The default JDBC driver _auto-commit_ mode
 
 |_holon.datasource._ *max-pool-size*
 |Integer number
-|For connection pooling DataSource types, configure the minimum connection pool size
+|For connection pooling `DataSource` types, configure the minimum connection pool size
 
 |_holon.datasource._ *min-pool-size*
 |Integer number
-|For connection pooling DataSource types, configure the maximum connection pool size
+|For connection pooling `DataSource` types, configure the maximum connection pool size
 
 |_holon.datasource._ *validation-query*
 |String
-|For connection pooling DataSource types the query to use to validate the connections in the pool
+|For connection pooling `DataSource` types the query to use to validate the connections in the pool
 
 |_holon.datasource._ *jndi-name*
 |String
 |_JNDI_ lookup name for `JNDI` DataSource retrieval strategy
 |===
 
-The `DataSourceConfigProperties` can be loaded from a number a sources using the default `ConfigPropertySet` builder interface:
+The `DataSourceConfigProperties` property set can be loaded from a number a sources using the default `ConfigPropertySet` builder API:
 
 [source, java]
 ----
@@ -171,37 +84,176 @@ include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=conf
 <4> Read the configuration properties from the `datasource.properties` file
 <5> Read the configuration properties from the `datasource.properties` `InputStream`
 
+[[MultipleDataSourceConfiguration]]
 === Multiple DataSource configuration
 
-When a multiple `DataSource` configuration is required and properties are read from the same source, a _data context id_ can be used to discern one `DataSource` configuration property set form another.
+When multiple `DataSource` instances are to be configured and the configuration properties are read from the same property source, a _data context id_ can be used to discern one `DataSource` configuration property set form another.
 
 From the property source point of view, the _data context id_ is used as a *suffix* after the configuration property set name (`holon.datasource`) and before the specific property name.
 
 For example, suppose we have a configuration property set for two different data sources as follows:
 
-[source, text]
+[source, text, subs=+quotes]
+.datasource.properties
 ----
-holon.datasource.one.url=jdbc:h2:mem:testdb1
-holon.datasource.one.username=sa
+holon.datasource.*one*.url=jdbc:h2:mem:testdb1
+holon.datasource.*one*.username=sa
 
-holon.datasource.two.url=jdbc:h2:mem:testdb2
-holon.datasource.two.username=sa
+holon.datasource.*two*.url=jdbc:h2:mem:testdb2
+holon.datasource.*two*.username=sa
 ----
 
-To build two DataSources, one bound to the `one` configuration property set and the other bound to the `two` configuration property set, the `DataSourceConfigProperties` can be obtained as follows, specifying the _data context id_ when obtaining the builder:
+In the example above, the `one` and `two` strings represents two different _data context ids_.
+
+To build two `DataSource` instances, one bound to the `one` configuration property set and the other bound to the `two` configuration property set, the `DataSourceConfigProperties` implementation can be obtained as follows, specifying the _data context id_ when obtaining the builder, even using the same property source:
 
 [source, java]
 ----
 include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=configuration2,indent=0]
 ----
+<1> Obtain a `DataSourceConfigProperties` builder for the `one` _data context id_
+<2> Obtain a `DataSourceConfigProperties` builder for the `two` _data context id_
 
+[[DataSourceBuilder]]
+=== Build a DataSource using the `DataSourceBuilder` API
+
+The link:{apidir}/com/holonplatform/jdbc/DataSourceBuilder.html[DataSourceBuilder^] API can be used to build `DataSource` instances using the <<DataSourceConfigProperties>> property set.
+
+A `DataSourceBuilder` API implementation can be otained using the `create()` static method.
+
+For example, using the following configuration properties file:
+
+[source, text]
+.datasource.properties
+----
+holon.datasource.url=jdbc:h2:mem:testdb
+holon.datasource.username=sa
+holon.datasource.password=
+----
+
+The `DataSourceBuilder` API can be used as follows to create a `DataSource` instance:
+
+[source, java]
+----
+include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=builder,indent=0]
+----
+<1> Create a configuration property set using the `datasource.properties` file as property source
+<2> Build a `DataSource` instance according to given configuration properties
+
+==== Provide DataSource configuration properties programmatically
+
+The `DataSourceBuilder` API can be also used directly providing the `DataSource` configuration properties. For this purpose, an appropriate _builder_ API can be obtained using the `builder()` method.
+
+This builder also supports `DataSource` _initialization scripts_, which will be executed at `DataSource` initialization time. The `DataSource` _initialization scripts_ can be directly provided as a `String` of SQL statements or specifying classpath resource name (for example a file name).
+
+[source, java]
+----
+include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=builder2,indent=0]
+----
+<1> Obtain the `DataSource` builder
+
+[[DataSourceType]]
+=== DataSource type
+
+When using the `DataSourceBuilder` API, the concrete `DataSource` implementation to use can be selected using the `type` configuration property.
+
+The following *type names* are supported by default:
+
+* *`com.holonplatform.jdbc.BasicDataSource`*: Create `BasicDataSource` instances, to be used typically for testing purposes. It is a simple `DataSource` implementation, using the `java.sql.DriverManager` class and returning a new `java.sql.Connection` from every `getConnection` call. See <<BasicDataSource>>.
+
+* *`com.zaxxer.hikari.HikariDataSource`*: Create https://github.com/brettwooldridge/HikariCP[HikariCP] connection pooling `DataSource` instances. The _HikariCP_ library dependency must be available in classpath. All default configuration properties are supported, and additional Hikari-specific configuration properties can be specified using the `hikari` prefix before the actual property name, for example: `holon.datasource.*hikari*.connectionTimeout`.
+
+* *`org.apache.commons.dbcp2.BasicDataSource`*: Create http://commons.apache.org/proper/commons-dbcp/[Apache Commons DBCP 2] connection pooling `DataSource` instances. The _DBCP 2_ library dependency must be available in classpath. All default configuration properties are supported, and additional DBCP-specific configuration properties can be specified using the `dbcp` prefix before the actual property name, for example: `holon.datasource.*dbcp*.maxWaitMillis`.
+
+* *`org.apache.tomcat.jdbc.pool.DataSource`*: Create https://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html[Tomcat JDBC] connection pooling `DataSource` instances. The _tomcat-jdbc_ library dependency must be available in classpath. All default configuration properties are supported, and additional Tomcat-specific configuration properties can be specified using the `tomcat` prefix before the actual property name, for example: `holon.datasource.*tomcat*.maxAge`.
+
+* *`JNDI`*: Obtain a `DataSource` using *JNDI*. The `jndi-name` configuration property is required to specify the JNDI name to which the `DataSource` is bound in the JNDI context.
+
+NOTE: To use a specific `DataSource` implementation, the corresponding classes must be available in classpath. So you have to ensure the required dependencies are declared for your project.
+
+For example, to use a https://github.com/brettwooldridge/HikariCP[HikariCP] pooling `DataSource` implementation, the `com.zaxxer.hikari.HikariDataSource` type can be specified:
+
+[source, text, subs=+quotes]
+----
+holon.datasource.url=jdbc:h2:mem:testdb
+holon.datasource.username=sa
+holon.datasource.password=
+
+*holon.datasource.type*=com.zaxxer.hikari.HikariDataSource
+----
+
+[[DataSourceTypeStrategy]]
+==== Default DataSource type selection strategy
+
+If the `type` configuration property is not specified, the default `DataSource` type selection strategy is defined as follows:
+
+. If the https://github.com/brettwooldridge/HikariCP[HikariCP^] dependecy is present in classpath, the *`com.zaxxer.hikari.HikariDataSource`* type will be used;
+. If the http://commons.apache.org/proper/commons-dbcp/[Apache Commons DBCP 2^] dependecy is present in classpath, the *`org.apache.commons.dbcp2.BasicDataSource`* type will be used;
+. If the https://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html[Tomcat JDBC^] dependecy is present in classpath, the *`org.apache.tomcat.jdbc.pool.DataSource`* type will be used;
+. Otherwise, the *`com.holonplatform.jdbc.BasicDataSource`* type is used as fallback.
+
+[[DataSourceFactory]]
+==== DataSourceFactory
+
+The default `DataSourceBuilder` API implementation delegates `DataSource` instances creation to a set of concrete link:{apidir}/com/holonplatform/jdbc/DataSourceFactory.html[DataSourceFactory^] implementations, each of them bound to a single `DataSource` *type* name.
+
+A `DataSourceFactory` can be registered in the `DataSourceBuilder` API and used to provide additional `DataSource` types support or to replace a default type creation strategy with a new one. 
+
+The `DataSource` type name to which the `DataSourceFactory` is bound is provided by the `getDataSourceType()` method.
+
+The registration of a `DataSourceFactory` can be accomplished in two ways:
+
+* *Direct registration*: A `DataSourceFactory` instance can directly registered in a `DataSourceBuilder` API using the `registerFactory` method. Any previous binding with given type will be replaced by the given factory.
+
+[source, java]
+----
+include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=factory,indent=0]
+----
+<1> Create a `DataSourceFactory` implementation
+<2> Register the factory in the `DataSourceBuilder` API instance
+
+Using the direct `DataSourceFactory` registration, the registered factories will be available *only* for the specific `DataSourceBuilder` API instance.
+
+* *Java ServiceLoader extensions*: The default Java `ServiceLoader` extensions can be used, providing a file named `com.holonplatform.jdbc.DataSourceFactory` under the `META-INF/services` folder, in which to specify the fully qualified name of the `DataSourceFactory` implementation/s to register. This way, the factory will be automatically registered at `DataSourceBuilder` API initialization time.
+
+Using the `ServiceLoader` extensions method, the `DataSourceFactory` implementations will be available for *any* `DataSourceBuilder` API instance.
+
+[[DataSourcePostProcessor]]
+==== DataSourcePostProcessor
+
+The link:{apidir}/com/holonplatform/jdbc/DataSourcePostProcessor.html[DataSourcePostProcessor^] interface can be used to perform additional `DataSource` initialization and configuration when using the `DataSourceBuilder` API. 
+
+The `postProcessDataSource(...)` method is called just after the creation of any `DataSource` instance, 
+providing the `DataSource` instance itself, the _type_ name and the `DataSourceConfigProperties` used to create the `DataSource` instance.
+
+In order to activate a `DataSourcePostProcessor`, it must be registered in the `DataSourceBuilder` API instance used to create the `DataSource`. 
+
+NOTE: When more than one `DataSourcePostProcessor` is registered, the invocation order will be the same as the registration order.
+
+The registration of a `DataSourcePostProcessor` can be accomplished in two ways:
+
+* *Direct registration*: A `DataSourcePostProcessor` instance can directly registered in a `DataSourceBuilder` instance using the `registerPostProcessor` method.
+
+[source, java]
+----
+include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=postprocessor,indent=0]
+----
+<1> Register a post processor in the `DataSourceBuilder` API instance
+
+Using the direct `DataSourcePostProcessor` registration, the registered post processors will be available *only* for the specific `DataSourceBuilder` API instance.
+
+* *Java ServiceLoader extensions*: The default Java `ServiceLoader` extensions can be used, providing a file named `com.holonplatform.jdbc.DataSourcePostProcessor` under the `META-INF/services` folder, in which to specify the fully qualified name of the `DataSourcePostProcessor` implementation/s to register. This way, the post processors will be automatically registered at `DataSourceBuilder` API initialization time.
+
+Using the `ServiceLoader` extensions method, the `DataSourcePostProcessor` implementations will be registered for *any* `DataSourceBuilder` API instance.
+
+[[BasicDataSource]]
 === BasicDataSource
 
-A link:{apidir}/com/holonplatform/jdbc/BasicDataSource.html[BasicDataSource^] is provided to directly use a simple, standard `javax.sql.DataSource` implementation.
+The link:{apidir}/com/holonplatform/jdbc/BasicDataSource.html[BasicDataSource^] API is made available to create simple, standard `javax.sql.DataSource` implementations.
 
-The `BasicDataSource` uses the `java.sql.DriverManager` class and returns a new `java.sql.Connection` from every `getConnection()` call.
+The `BasicDataSource` implementation uses the `java.sql.DriverManager` class and returns a new `java.sql.Connection` from every `getConnection()` call.
 
-For this reason, can be useful for test or standalone environments outside J2EE containers.
+CAUTION: This implementation is not designed for production and should be used only for testing purposes.
 
 A fluent builder is provided to create and configure a `BasicDataSource` instance:
 

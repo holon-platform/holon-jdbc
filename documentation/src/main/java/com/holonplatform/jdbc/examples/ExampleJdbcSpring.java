@@ -18,38 +18,24 @@ package com.holonplatform.jdbc.examples;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.holonplatform.jdbc.spring.EnableDataSource;
 
-public class ExampleJdbcSpring2 {
+@SuppressWarnings("unused")
+public class ExampleJdbcSpring {
 
 	// tag::config[]
 	@Configuration
 	@PropertySource("datasource.properties")
-	static class Config {
-
-		@Configuration
-		@EnableDataSource(dataContextId = "one") // <1>
-		static class Config1 {
-		}
-
-		@Configuration
-		@EnableDataSource(dataContextId = "two") // <2>
-		static class Config2 {
-		}
+	@EnableDataSource // <1>
+	class Config {
 
 	}
 
 	@Autowired
-	@Qualifier("one") // <3>
-	private DataSource dataSource1;
-
-	@Autowired
-	@Qualifier("two")
-	private DataSource dataSource2;
+	private DataSource dataSource1; // <2>
 	// end::config[]
 
 }
