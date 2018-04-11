@@ -38,8 +38,8 @@ import com.holonplatform.jdbc.spring.SpringDataSourceConfigProperties;
 import com.holonplatform.jdbc.spring.boot.DataSourcesAutoConfiguration;
 import com.holonplatform.jdbc.spring.internal.DataSourceRegistrar;
 import com.holonplatform.spring.EnvironmentConfigPropertyProvider;
+import com.holonplatform.spring.PrimaryMode;
 import com.holonplatform.spring.internal.BeanRegistryUtils;
-import com.holonplatform.spring.internal.PrimaryMode;
 import com.holonplatform.spring.internal.SpringLogger;
 
 /**

@@ -15,8 +15,9 @@
  */
 package com.holonplatform.jdbc.spring.boot.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,12 +38,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ActiveProfiles("init")
-public class TestMultiDataSourceInit {
+@ActiveProfiles("multi")
+public class TestMultiDataSourceMulti {
 
 	@Configuration
 	@EnableAutoConfiguration
-	protected static class Config {
+	static class Config {
 
 	}
 
