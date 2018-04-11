@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.spring.internal.DataSourceRegistrar;
-import com.holonplatform.spring.internal.PrimaryMode;
+import com.holonplatform.spring.PrimaryMode;
 
 /**
  * Annotation to be used on Spring Configuration classes to setup a {@link DataSource} using external configuration
