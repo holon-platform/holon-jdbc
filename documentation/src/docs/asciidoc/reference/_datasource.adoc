@@ -140,6 +140,7 @@ include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=buil
 <1> Create a configuration property set using the `datasource.properties` file as property source
 <2> Build a `DataSource` instance according to given configuration properties
 
+[[DataSourceConfigurationPropertiesProgrammatically]]
 ==== Provide DataSource configuration properties programmatically
 
 The `DataSourceBuilder` API can be also used directly providing the `DataSource` configuration properties. For this purpose, an appropriate _builder_ API can be obtained using the `builder()` method.
