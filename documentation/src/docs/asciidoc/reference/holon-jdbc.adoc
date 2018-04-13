@@ -69,6 +69,13 @@ The Holon Platform provides an *overall Maven BOM (Bill of Materials)* to easily
 
 See link:index.html#obtain-the-platform-artifacts[Obtain the platform artifacts] for details.
 
+[[WhatsNew51x]]
+== What's new in version 5.1.x
+
+* A `DataSource` can now be built through the `DataSourceBuilder` API directly providing the `DataSource` configuration properties, besides using a configuration property source. See <<DataSourceConfigurationPropertiesProgrammatically>>.
+
+* The link:{apidir}/com/holonplatform/jdbc/JdbcConnectionHandler.html[JdbcConnectionHandler^] API was introduced to provide `DataSource` connections lifecycle customization. See the link:holon-datastore-jdbc.html[Holon Platform JDBC Datastore Module^] for a use case.
+
 // Inclusions
 
 include::_datasource.adoc[]
