@@ -76,9 +76,9 @@ include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbcSpring2.java[t
 
 The `@EnableDataSource` annotation provides a `primary()` attribute which can be used to control the _primary mode_ of the `DataSource` bean registration.
 
-If the _primary mode_ is set to `PrimaryMode.TRUE`, the `DataSource` bean created with the corresponding annotation will be marked as *primary* in Spring application context, meaning that will be the one provided by the Spring context in case of multiple available candidates, when no specific bean name or qualifier is specified in the dependency injection declaration.
+If the _primary mode_ is set to `PrimaryMode.TRUE`, the `DataSource` bean created with the corresponding annotation will be marked as *primary* in the Spring application context, meaning that will be the one provided by Spring in case of multiple available candidates, when no specific bean name or qualifier is specified in the dependency injection declaration.
 
-TIP: This behaviour is similar to the one obtained with the Spring `@Primary` annotation at ban definition time.
+TIP: This behaviour is similar to the one obtained with the Spring `@Primary` annotation at bean definition time.
 
 [source, java]
 ----
