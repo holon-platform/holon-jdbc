@@ -1,4 +1,6 @@
-= Holon Platform JDBC support
+= Holon Platform JDBC Module - Reference manual
+:description: Holon platform JDBC module reference documentation. \
+The JDBC module provides Java DataBase Connectivity (JDBC) support, dealing with DataSource configuration and management in single or multiple persistence source enviroments and DataSource configuration in a Spring context, including the Spring Boot support.
 :revnumber: {project-version}
 :apidir: ../api/holon-jdbc
 :linkattrs:
@@ -7,13 +9,26 @@
 :toc: left
 :toclevels: 3
 
-Copyright © 2016-2017
+Copyright © 2016-2018
 
 _Copies of this document may be made for your own use and for distribution to others, provided that you do not charge any fee for such copies and further provided that each copy contains this Copyright Notice, whether distributed in print or electronically._
 
 == Introduction
 
 The Holon Platform *JDBC* module provides base JDBC support to the Holon platform, dealing with `javax.sql.DataSource` configuration and providing a _multi-tenant_ DataSource implementation. 
+
+Futhermore, the module provides integration with the *Spring* framework relatively to `DataSource` configuration and `DataSource` auto-configuration facilities using *Spring Boot*.
+
+=== Sources and contributions
+
+The Holon Platform *JDBC* module source code is available from the GitHub repository link:https://github.com/holon-platform/holon-jdbc[https://github.com/holon-platform/holon-jdbc^].
+
+See the repository `README` file for information about:
+
+* The source code structure.
+* How to build the module artifacts from sources.
+* Where to find the code examples.
+* How to contribute to the module development.
 
 == Obtaining the artifacts
 
@@ -53,6 +68,13 @@ The BOM can be imported in a Maven project in the following way:
 The Holon Platform provides an *overall Maven BOM (Bill of Materials)* to easily obtain all the available platform artifacts.
 
 See link:index.html#obtain-the-platform-artifacts[Obtain the platform artifacts] for details.
+
+[[WhatsNew51x]]
+== What's new in version 5.1.x
+
+* A `DataSource` can now be built through the `DataSourceBuilder` API directly providing the `DataSource` configuration properties, besides using a configuration property source. See <<DataSourceConfigurationPropertiesProgrammatically>>.
+
+* The link:{apidir}/com/holonplatform/jdbc/JdbcConnectionHandler.html[JdbcConnectionHandler^] API was introduced to provide `DataSource` connections lifecycle customization. See the link:holon-datastore-jdbc.html[Holon Platform JDBC Datastore Module^] for a use case.
 
 // Inclusions
 

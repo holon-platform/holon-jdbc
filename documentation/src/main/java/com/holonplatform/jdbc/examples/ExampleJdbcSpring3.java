@@ -15,47 +15,26 @@
  */
 package com.holonplatform.jdbc.examples;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.holonplatform.jdbc.spring.EnableDataSource;
 
-public class ExampleJdbcSpring1 {
+public class ExampleJdbcSpring3 {
 
-	// tag::multiple1[]
-	@EnableDataSource(dataContextId = "one")
+	// tag::config[]
 	@Configuration
-	class Config1 {
-	}
-
-	@EnableDataSource(dataContextId = "two")
-	@Configuration
-	class Config2 {
-	}
-
 	@PropertySource("datasource.properties")
-	@Import({ Config1.class, Config2.class })
-	@Configuration
-	class OverallConfig {
+	@EnableDataSource(enableTransactionManager = true) // <1>
+	class Config {
 
 	}
 
-	class MyBean {
-
-		@Autowired
-		@Qualifier("one")
-		private DataSource dataSource1;
-
-		@Autowired
-		@Qualifier("two")
-		private DataSource dataSource2;
-
+	@Transactional
+	void doSomethingTransactionally() { // <2>
+		// ...
 	}
-	// end::multiple1[]
+	// end::config[]
 
 }

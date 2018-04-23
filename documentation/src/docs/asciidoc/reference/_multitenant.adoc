@@ -1,16 +1,17 @@
+[[MultiTenantDataSource]]
 == Multi-tenant DataSource
 
-The platform provides a DataSource with _multi-tenant_ support, represented by the  link:{apidir}/com/holonplatform/jdbc/MultiTenantDataSource.html[MultiTenantDataSource^] interface.
+The Holon platform JDBC module provides a `DataSource` implementation with _multi-tenant_ support, represented by the  link:{apidir}/com/holonplatform/jdbc/MultiTenantDataSource.html[MultiTenantDataSource^] interface.
 
-This DataSource acts as a *wrapper* for concrete `DataSource` implementations, and a new `DataSource` instance is created for each *tenant* which requires a connection. By default, `DataSource` instances are reused, so if an instance was already created for a specific tenant, this one is returned at next tenant connection request.
+This `DataSource` implementation acts as a *wrapper* for concrete `DataSource` implementations, one for each _tenant_ id. By default, `DataSource` instances are reused, so if an instance was already created for a specific tenant id, this one is returned at next tenant connection request.
 
 A `reset()` method is provided to clear the internal per-tenant `DataSource` instance cache. To clear only the cached instance for a specific *tenant id*, the `reset(String tenantId)` method is provided.
 
-Two configured elements are required for the proper operation of a `MultiTenantDataSource`:
+The `MultiTenantDataSource` implementation relies on the APIs to work properly:
 
-. A `TenantResolver` instance, configured at DataSource build time or available in platform `Context` (See link:core.html#Multi-tenancy) to provide the current *tenant id*;
+. A `com.holonplatform.core.tenancy.TenantResolver` API instance to obtain the *current tenant id*.
 
-. A link:{apidir}/com/holonplatform/jdbc/TenantDataSourceProvider.html[TenantDataSourceProvider^], which acts as a concrete `DataSource` instances provider, configured at DataSource build time or available in platform `Context`.
+. A link:{apidir}/com/holonplatform/jdbc/TenantDataSourceProvider.html[TenantDataSourceProvider^] API implementation, which acts as concrete `DataSource` instances provider, used to obtain a `DataSource` for each *tenant id*.
 
 [source, java]
 ----
@@ -18,3 +19,9 @@ include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleJdbc.java[tag=mult
 ----
 <1> Set the `TenantResolver`
 <2> Set the `TenantDataSourceProvider`
+
+=== `TenantResolver` and `TenantDataSourceProvider` lookup strategy
+
+If not directly configured, the `TenantResolver` and `TenantDataSourceProvider` implementation can be obtained by default using the Holon Platform link:holon-core.html#Context[Context^] resources architecture.
+
+The `MultiTenantDataSource` will try to obtain a `TenantResolver` and a `TenantDataSourceProvider` implementation as context resources using the default _context keys_ (i.e. the class names) when they are not directly configured using the appropriate builder methods.

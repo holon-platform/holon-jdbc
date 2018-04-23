@@ -36,10 +36,10 @@ import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.spring.EnableDataSource;
 import com.holonplatform.jdbc.spring.SpringDataSourceConfigProperties;
 import com.holonplatform.spring.EnvironmentConfigPropertyProvider;
+import com.holonplatform.spring.PrimaryMode;
 import com.holonplatform.spring.internal.AbstractConfigPropertyRegistrar;
 import com.holonplatform.spring.internal.BeanRegistryUtils;
 import com.holonplatform.spring.internal.GenericDataContextBoundBeanDefinition;
-import com.holonplatform.spring.internal.PrimaryMode;
 import com.holonplatform.spring.internal.SpringLogger;
 
 /**

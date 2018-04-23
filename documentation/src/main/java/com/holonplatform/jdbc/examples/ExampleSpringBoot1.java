@@ -19,32 +19,12 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
-import com.holonplatform.jdbc.spring.EnableDataSource;
-
-public class ExampleJdbcSpring2 {
+public class ExampleSpringBoot1 {
 
 	// tag::config[]
-	@Configuration
-	@PropertySource("datasource.properties")
-	static class Config {
-
-		@Configuration
-		@EnableDataSource(dataContextId = "one") // <1>
-		static class Config1 {
-		}
-
-		@Configuration
-		@EnableDataSource(dataContextId = "two") // <2>
-		static class Config2 {
-		}
-
-	}
-
 	@Autowired
-	@Qualifier("one") // <3>
+	@Qualifier("one")
 	private DataSource dataSource1;
 
 	@Autowired

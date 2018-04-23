@@ -32,7 +32,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.holonplatform.jdbc.spring.EnableDataSource;
-import com.holonplatform.spring.internal.PrimaryMode;
+import com.holonplatform.spring.PrimaryMode;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestEnableMultiDataSourceWithForcePrimary.Config.class)

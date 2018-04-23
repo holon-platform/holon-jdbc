@@ -27,8 +27,8 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 
 import com.holonplatform.jdbc.spring.internal.DataSourceRegistrar;
+import com.holonplatform.spring.PrimaryMode;
 import com.holonplatform.spring.internal.DataContextBoundBeanDefinition;
-import com.holonplatform.spring.internal.PrimaryMode;
 
 /**
  * DataSource transaction manager registrar.

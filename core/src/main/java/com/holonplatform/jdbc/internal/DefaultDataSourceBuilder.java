@@ -23,13 +23,17 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.sql.DataSource;
 
+import com.holonplatform.core.config.ConfigPropertySet;
 import com.holonplatform.core.config.ConfigPropertySet.ConfigurationException;
 import com.holonplatform.core.internal.Logger;
+import com.holonplatform.core.internal.utils.ClassUtils;
 import com.holonplatform.core.internal.utils.ObjectUtils;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.DataSourceFactory;
 import com.holonplatform.jdbc.DataSourcePostProcessor;
+import com.holonplatform.jdbc.DataSourceType;
+import com.holonplatform.jdbc.DatabasePlatform;
 
 /**
  * Default {@link DataSourceBuilder} implementation.
@@ -175,6 +179,182 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
 			pp.addAll(DefaultDataSourceBuilderConfiguration.getDataSourcePostProcessors(classLoader));
 		}
 		return pp;
+	}
+
+	// Direct builder
+
+	/**
+	 * Default {@link Builder}.
+	 */
+	public static class DefaultBuilder implements Builder {
+
+		private final ConfigPropertySet.Builder<DataSourceConfigProperties> config = DataSourceConfigProperties
+				.builder();
+
+		private List<String> sqlScripts = new LinkedList<>();
+
+		private List<String> sqlScriptResources = new LinkedList<>();
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#type(java.lang.String)
+		 */
+		@Override
+		public Builder type(String typeName) {
+			ObjectUtils.argumentNotNull(typeName, "DataSource type must be not null");
+			config.withProperty(DataSourceConfigProperties.TYPE, typeName);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#type(com.holonplatform.jdbc.DataSourceType)
+		 */
+		@Override
+		public Builder type(DataSourceType type) {
+			ObjectUtils.argumentNotNull(type, "DataSource type must be not null");
+			config.withProperty(DataSourceConfigProperties.TYPE, type.getType());
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#name(java.lang.String)
+		 */
+		@Override
+		public Builder name(String name) {
+			config.withProperty(DataSourceConfigProperties.NAME, name);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#driverClassName(java.lang.String)
+		 */
+		@Override
+		public Builder driverClassName(String driverClassName) {
+			config.withProperty(DataSourceConfigProperties.DRIVER_CLASS_NAME, driverClassName);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#url(java.lang.String)
+		 */
+		@Override
+		public Builder url(String url) {
+			config.withProperty(DataSourceConfigProperties.URL, url);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#username(java.lang.String)
+		 */
+		@Override
+		public Builder username(String username) {
+			config.withProperty(DataSourceConfigProperties.USERNAME, username);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#password(java.lang.String)
+		 */
+		@Override
+		public Builder password(String password) {
+			config.withProperty(DataSourceConfigProperties.PASSWORD, password);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#database(com.holonplatform.jdbc.DatabasePlatform)
+		 */
+		@Override
+		public Builder database(DatabasePlatform databasePlatform) {
+			config.withProperty(DataSourceConfigProperties.PLATFORM, databasePlatform);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#autoCommit(boolean)
+		 */
+		@Override
+		public Builder autoCommit(boolean autoCommit) {
+			config.withProperty(DataSourceConfigProperties.AUTOCOMMIT, autoCommit);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#minPoolSize(int)
+		 */
+		@Override
+		public Builder minPoolSize(int minPoolSize) {
+			config.withProperty(DataSourceConfigProperties.MIN_POOL_SIZE, minPoolSize);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#maxPoolSize(int)
+		 */
+		@Override
+		public Builder maxPoolSize(int maxPoolSize) {
+			config.withProperty(DataSourceConfigProperties.MAX_POOL_SIZE, maxPoolSize);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#validationQuery(java.lang.String)
+		 */
+		@Override
+		public Builder validationQuery(String validationQuery) {
+			config.withProperty(DataSourceConfigProperties.VALIDATION_QUERY, validationQuery);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#withInitScript(java.lang.String)
+		 */
+		@Override
+		public Builder withInitScript(String sqlScript) {
+			ObjectUtils.argumentNotNull(sqlScript, "SQL script must be not null");
+			this.sqlScripts.add(sqlScript);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#withInitScriptResource(java.lang.String)
+		 */
+		@Override
+		public Builder withInitScriptResource(String sqlScriptResourceName) {
+			ObjectUtils.argumentNotNull(sqlScriptResourceName, "SQL script resource name must be not null");
+			this.sqlScriptResources.add(sqlScriptResourceName);
+			return this;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.holonplatform.jdbc.DataSourceBuilder.Builder#build()
+		 */
+		@Override
+		public DataSource build() {
+			final DataSource dataSource = new DefaultDataSourceBuilder(ClassUtils.getDefaultClassLoader())
+					.build(config.build());
+
+			// check init scripts
+			DataSourceInitializer.initDataSourceFromSQL(dataSource, sqlScripts);
+			DataSourceInitializer.initDataSourceFromSQLResources(dataSource, sqlScriptResources);
+
+			return dataSource;
+		}
+
 	}
 
 }

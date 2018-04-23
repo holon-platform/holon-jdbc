@@ -16,8 +16,10 @@
 package com.holonplatform.jdbc.test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
@@ -33,20 +35,24 @@ public class TestBasicDataSource {
 	@Test
 	public void testBuilder() throws SQLException {
 
-		DataSource dataSource = BasicDataSource.builder().url("jdbc:h2:mem:testdb").username("sa")
+		DataSource dataSource = BasicDataSource.builder().url("jdbc:h2:mem:testdb_b1").username("sa")
 				.driverClassName("org.h2.Driver").build();
 
 		try (Connection connection = dataSource.getConnection()) {
 			assertNotNull(connection);
-			connection.createStatement().executeQuery("SELECT 1");
+			try (ResultSet rs = connection.createStatement().executeQuery("SELECT 1")) {
+				assertTrue(rs.next());
+			}
 		}
 
-		dataSource = BasicDataSource.builder().url("jdbc:h2:mem:testdb").username("sa").database(DatabasePlatform.H2)
+		dataSource = BasicDataSource.builder().url("jdbc:h2:mem:testdb_b2").username("sa").database(DatabasePlatform.H2)
 				.build();
 
 		try (Connection connection = dataSource.getConnection()) {
 			assertNotNull(connection);
-			connection.createStatement().executeQuery("SELECT 1");
+			try (ResultSet rs = connection.createStatement().executeQuery("SELECT 1")) {
+				assertTrue(rs.next());
+			}
 		}
 
 	}
