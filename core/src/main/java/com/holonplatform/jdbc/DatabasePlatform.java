@@ -39,7 +39,7 @@ public enum DatabasePlatform {
 	/**
 	 * IBM DB2 AS400
 	 */
-	DB2_AS400("com.ibm.as400.access.AS400JDBCDriver", "com.ibm.as400.access.AS400JDBCXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:db2:"),
+	DB2_AS400("com.ibm.as400.access.AS400JDBCDriver", "com.ibm.as400.access.AS400JDBCXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:as400:"),
 
 	/**
 	 * Apache Derby
