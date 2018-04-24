@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.holon-platform.jdbc</groupId>
 		<artifactId>holon-jdbc-root</artifactId>
-		<version>5.1.1-SNAPSHOT</version>
+		<version>5.2.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>holon-jdbc-spring</artifactId>
@@ -95,5 +95,22 @@
 		</dependency>
 
 	</dependencies>
+	
+	<build>
+		<plugins>
+			<!-- JDK9 Automatic-Module-Name -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Automatic-Module-Name>com.holonplatform.jdbc.spring</Automatic-Module-Name>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
