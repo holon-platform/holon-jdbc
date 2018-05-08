@@ -47,7 +47,7 @@ _Maven BOM:_
     <dependency>
         <groupId>com.holon-platform.jdbc</groupId>
         <artifactId>holon-jdbc-bom</artifactId>
-        <version>5.1.0</version>
+        <version>5.1.1</version>
         <type>pom</type>
         <scope>import</scope>
     </dependency>
