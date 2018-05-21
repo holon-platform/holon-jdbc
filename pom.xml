@@ -63,7 +63,7 @@
 		<!-- HikariCP -->
 		<hikaricp.version>3.1.0</hikaricp.version>
 		<!-- Commons DBCP -->
-		<commons-dbcp.version>2.2.0</commons-dbcp.version>
+		<commons-dbcp.version>2.3.0</commons-dbcp.version>
 		<!-- Tomcat pool -->
 		<tomcat-jdbc.version>8.5.30</tomcat-jdbc.version>
 
