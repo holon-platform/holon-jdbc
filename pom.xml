@@ -68,7 +68,7 @@
 		<tomcat-jdbc.version>8.5.30</tomcat-jdbc.version>
 
 		<!-- ByteBuddy -->
-		<bytebuddy.version>1.8.7</bytebuddy.version>
+		<bytebuddy.version>1.8.11</bytebuddy.version>
 
 		<!-- H2 (test) -->
 		<h2.version>1.4.196</h2.version>
