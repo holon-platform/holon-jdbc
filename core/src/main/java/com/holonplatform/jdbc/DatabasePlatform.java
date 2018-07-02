@@ -18,6 +18,11 @@ package com.holonplatform.jdbc;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+
+import com.holonplatform.core.internal.utils.ClassUtils;
+import com.holonplatform.core.internal.utils.ObjectUtils;
 
 /**
  * Enumeration for common database platforms
@@ -39,12 +44,14 @@ public enum DatabasePlatform {
 	/**
 	 * IBM DB2 AS400
 	 */
-	DB2_AS400("com.ibm.as400.access.AS400JDBCDriver", "com.ibm.as400.access.AS400JDBCXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:as400:"),
+	DB2_AS400("com.ibm.as400.access.AS400JDBCDriver", "com.ibm.as400.access.AS400JDBCXADataSource",
+			"SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:as400:"),
 
 	/**
 	 * Apache Derby
 	 */
-	DERBY("org.apache.derby.jdbc.EmbeddedDriver", "org.apache.derby.jdbc.EmbeddedXADataSource", "SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:derby:"),
+	DERBY("org.apache.derby.jdbc.EmbeddedDriver", "org.apache.derby.jdbc.EmbeddedXADataSource",
+			"SELECT 1 FROM SYSIBM.SYSDUMMY1", "jdbc:derby:"),
 
 	/**
 	 * H2
@@ -54,7 +61,8 @@ public enum DatabasePlatform {
 	/**
 	 * HSQL
 	 */
-	HSQL("org.hsqldb.jdbc.JDBCDriver", "org.hsqldb.jdbc.pool.JDBCXADataSource", "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_USERS", "jdbc:hsqldb:"),
+	HSQL("org.hsqldb.jdbc.JDBCDriver", "org.hsqldb.jdbc.pool.JDBCXADataSource",
+			"SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_USERS", "jdbc:hsqldb:"),
 
 	/**
 	 * IBN Informix
@@ -79,7 +87,8 @@ public enum DatabasePlatform {
 	/**
 	 * Oracle
 	 */
-	ORACLE("oracle.jdbc.OracleDriver", "oracle.jdbc.xa.client.OracleXADataSource", "SELECT 1 from DUAL", "jdbc:oracle:"),
+	ORACLE("oracle.jdbc.OracleDriver", "oracle.jdbc.xa.client.OracleXADataSource", "SELECT 1 from DUAL",
+			"jdbc:oracle:"),
 
 	/**
 	 * PostgreSQL
@@ -89,7 +98,8 @@ public enum DatabasePlatform {
 	/**
 	 * Microsoft SQLServer
 	 */
-	SQL_SERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver", "com.microsoft.sqlserver.jdbc.SQLServerXADataSource", "SELECT 1", "jdbc:sqlserver:"),
+	SQL_SERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver", "com.microsoft.sqlserver.jdbc.SQLServerXADataSource",
+			"SELECT 1", "jdbc:sqlserver:"),
 
 	/**
 	 * SQLite
@@ -114,6 +124,9 @@ public enum DatabasePlatform {
 	 * @return Driver class name
 	 */
 	public String getDriverClassName() {
+		if (this == DatabasePlatform.MYSQL && isMySQLConnectorJ8Present(ClassUtils.getDefaultClassLoader())) {
+			return "com.mysql.cj.jdbc.Driver";
+		}
 		return driverClassName;
 	}
 
@@ -122,6 +135,9 @@ public enum DatabasePlatform {
 	 * @return the XA driver class name
 	 */
 	public String getXaDriverClassName() {
+		if (this == DatabasePlatform.MYSQL && isMySQLConnectorJ8Present(ClassUtils.getDefaultClassLoader())) {
+			return "com.mysql.cj.jdbc.MysqlXADataSource";
+		}
 		return xaDriverClassName;
 	}
 
@@ -140,7 +156,8 @@ public enum DatabasePlatform {
 	 */
 	public static DatabasePlatform fromUrl(String jdbcUrl) {
 		if (jdbcUrl != null) {
-			String url = jdbcUrl.trim().toLowerCase();
+			final String url = jdbcUrl.trim().toLowerCase();
+			// other platforms
 			for (DatabasePlatform dp : values()) {
 				if (dp.connectionUrlPrefix != null) {
 					for (String prefix : dp.connectionUrlPrefix) {
@@ -152,6 +169,22 @@ public enum DatabasePlatform {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * MySQL Connector/J 8+ presence in classpath for classloader
+	 */
+	private static final Map<ClassLoader, Boolean> MYSQL_CONNECTORJ_8_PRESENT = new WeakHashMap<>();
+
+	/**
+	 * Checks whether MySQL Connector/J 8+ is available from classpath
+	 * @param classLoader ClassLoader to use (not null)
+	 * @return <code>true</code> if present
+	 */
+	private static boolean isMySQLConnectorJ8Present(ClassLoader classLoader) {
+		ObjectUtils.argumentNotNull(classLoader, "ClassLoader must be not null");
+		return MYSQL_CONNECTORJ_8_PRESENT.computeIfAbsent(classLoader,
+				cl -> ClassUtils.isPresent("com.mysql.cj.jdbc.Driver", cl));
 	}
 
 }

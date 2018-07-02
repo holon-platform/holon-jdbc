@@ -16,6 +16,7 @@
 package com.holonplatform.jdbc.internal.factory;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import javax.annotation.Priority;
@@ -28,6 +29,7 @@ import com.holonplatform.core.internal.Logger;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.DataSourceFactory;
+import com.holonplatform.jdbc.DatabasePlatform;
 import com.holonplatform.jdbc.internal.DefaultDataSourceBuilderConfiguration;
 import com.holonplatform.jdbc.internal.JdbcLogger;
 
@@ -69,23 +71,36 @@ public class TomcatJdbcDataSourceFactory implements DataSourceFactory {
 
 		final String dataContextId = configurationProperties.getDataContextId().orElse(null);
 
+		LOGGER.debug(() -> "Building Tomcat DataSource [dataContextId=" + dataContextId + "]");
+
 		final String url = configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.URL, null);
 		if (url == null) {
 			throw new ConfigurationException(DefaultDataSourceBuilderConfiguration
 					.buildMissingJdbcUrlMessage(getDataSourceType(), dataContextId));
 		}
 
+		LOGGER.debug(() -> "Tomcat DataSource JDBC connection URL: " + url);
+
+		final Optional<DatabasePlatform> platform = Optional.ofNullable(DatabasePlatform.fromUrl(url));
+
+		LOGGER.debug(
+				() -> "Detected Database platform: " + platform.map(p -> p.name()).orElse("[Failed to auto detect"));
+
 		final String driverClass = configurationProperties.getConfigPropertyValue(
 				DataSourceConfigProperties.DRIVER_CLASS_NAME,
-				configurationProperties.getDriverClassName()
+				platform.map(p -> p.getDriverClassName())
 						.orElseThrow(() -> new ConfigurationException(DefaultDataSourceBuilderConfiguration
 								.buildMissingDriverClassMessage(getDataSourceType(), dataContextId))));
 
+		LOGGER.debug(() -> "Tomcat DataSource JDBC driver class name: " + driverClass);
+
 		try {
 			// specific properties
-			Map<String, String> tomcatProperties = configurationProperties.getSubPropertiesUsingPrefix("tomcat");
+			final Map<String, String> tomcatProperties = configurationProperties.getSubPropertiesUsingPrefix("tomcat");
 			Properties poolProperties = new Properties();
 			poolProperties.putAll(tomcatProperties);
+
+			LOGGER.debug(() -> "Tomcat DataSource properties: " + tomcatProperties);
 
 			PoolConfiguration config = org.apache.tomcat.jdbc.pool.DataSourceFactory
 					.parsePoolProperties(poolProperties);
@@ -100,7 +115,7 @@ public class TomcatJdbcDataSourceFactory implements DataSourceFactory {
 			}
 
 			// validation query
-			configurationProperties.getConnectionValidationQuery().ifPresent(vq -> {
+			platform.map(p -> p.getValidationQuery()).ifPresent(vq -> {
 				config.setTestOnBorrow(true);
 				config.setValidationQuery(vq);
 			});

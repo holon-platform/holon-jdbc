@@ -16,6 +16,7 @@
 package com.holonplatform.jdbc.internal.factory;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import javax.annotation.Priority;
@@ -26,6 +27,7 @@ import com.holonplatform.core.internal.Logger;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.DataSourceFactory;
+import com.holonplatform.jdbc.DatabasePlatform;
 import com.holonplatform.jdbc.internal.DefaultDataSourceBuilderConfiguration;
 import com.holonplatform.jdbc.internal.JdbcLogger;
 import com.zaxxer.hikari.HikariConfig;
@@ -69,23 +71,36 @@ public class HikariCPDataSourceFactory implements DataSourceFactory {
 
 		final String dataContextId = configurationProperties.getDataContextId().orElse(null);
 
+		LOGGER.debug(() -> "Building HikariCP DataSource [dataContextId=" + dataContextId + "]");
+
 		final String url = configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.URL, null);
 		if (url == null) {
 			throw new ConfigurationException(DefaultDataSourceBuilderConfiguration
 					.buildMissingJdbcUrlMessage(getDataSourceType(), dataContextId));
 		}
 
+		LOGGER.debug(() -> "HikariCP DataSource JDBC connection URL: " + url);
+
+		final Optional<DatabasePlatform> platform = Optional.ofNullable(DatabasePlatform.fromUrl(url));
+
+		LOGGER.debug(
+				() -> "Detected Database platform: " + platform.map(p -> p.name()).orElse("[Failed to auto detect"));
+
 		final String driverClass = configurationProperties.getConfigPropertyValue(
 				DataSourceConfigProperties.DRIVER_CLASS_NAME,
-				configurationProperties.getDriverClassName()
+				platform.map(p -> p.getDriverClassName())
 						.orElseThrow(() -> new ConfigurationException(DefaultDataSourceBuilderConfiguration
 								.buildMissingDriverClassMessage(getDataSourceType(), dataContextId))));
 
+		LOGGER.debug(() -> "HikariCP DataSource JDBC driver class name: " + driverClass);
+
 		try {
 			// Hikari specific configuration properties
-			Map<String, String> hikariProperties = configurationProperties.getSubPropertiesUsingPrefix("hikari");
+			final Map<String, String> hikariProperties = configurationProperties.getSubPropertiesUsingPrefix("hikari");
 			Properties properties = new Properties();
 			properties.putAll(hikariProperties);
+
+			LOGGER.debug(() -> "HikariCP DataSource properties: " + hikariProperties);
 
 			final HikariConfig config = new HikariConfig(properties);
 
@@ -96,10 +111,12 @@ public class HikariCPDataSourceFactory implements DataSourceFactory {
 			String name = configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.NAME, null);
 			if (name != null) {
 				config.setPoolName(name);
+
+				LOGGER.debug(() -> "HikariCP DataSource pool name: " + name);
 			}
 
 			// validation query
-			configurationProperties.getConnectionValidationQuery().ifPresent(vq -> config.setConnectionTestQuery(vq));
+			platform.map(p -> p.getValidationQuery()).ifPresent(vq -> config.setConnectionTestQuery(vq));
 
 			// credentials
 			config.setUsername(

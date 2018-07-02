@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.holon-platform</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.0.12-SNAPSHOT</version>
+		<version>1.0.11</version>
 	</parent>
 
 	<groupId>com.holon-platform.jdbc</groupId>
@@ -74,6 +74,9 @@
 
 		<!-- H2 (test) -->
 		<h2.version>1.4.196</h2.version>
+		<!-- MySQL (test) -->
+		<mysql-driver.version>5.1.44</mysql-driver.version>
+		<mysql-driver8.version>8.0.11</mysql-driver8.version>
 
 	</properties>
 
@@ -88,6 +91,25 @@
 	</modules>
 
 	<build>
+
+		<pluginManagement>
+			<plugins>
+				<!-- failsafe -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<executions>
+						<execution>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<!-- Aggregate javadocs -->
 			<plugin>

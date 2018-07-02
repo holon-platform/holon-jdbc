@@ -15,6 +15,8 @@
  */
 package com.holonplatform.jdbc.internal.factory;
 
+import java.util.Optional;
+
 import javax.annotation.Priority;
 import javax.sql.DataSource;
 
@@ -24,6 +26,7 @@ import com.holonplatform.jdbc.BasicDataSource;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.DataSourceFactory;
+import com.holonplatform.jdbc.DatabasePlatform;
 import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 import com.holonplatform.jdbc.internal.DefaultDataSourceBuilderConfiguration;
 import com.holonplatform.jdbc.internal.JdbcLogger;
@@ -61,19 +64,29 @@ public class BasicDataSourceFactory implements DataSourceFactory {
 
 		final String dataContextId = configurationProperties.getDataContextId().orElse(null);
 
+		LOGGER.debug(() -> "Building Basic DataSource [dataContextId=" + dataContextId + "]");
+
 		final String url = configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.URL, null);
 		if (url == null) {
 			throw new ConfigurationException(DefaultDataSourceBuilderConfiguration
 					.buildMissingJdbcUrlMessage(getDataSourceType(), dataContextId));
 		}
 
+		LOGGER.debug(() -> "Basic DataSource JDBC connection URL: " + url);
+
+		final Optional<DatabasePlatform> platform = Optional.ofNullable(DatabasePlatform.fromUrl(url));
+		
+		LOGGER.debug(() -> "Detected Database platform: " + platform.map(p -> p.name()).orElse("[Failed to auto detect"));
+
 		final String driverClassName = configurationProperties.getConfigPropertyValue(
 				DataSourceConfigProperties.DRIVER_CLASS_NAME,
-				configurationProperties.getDriverClassName()
+				platform.map(p -> p.getDriverClassName())
 						.orElseThrow(() -> new ConfigurationException("Cannot auto detect JDBC driver class to use, "
 								+ "please specify driver class name using config property "
 								+ DataSourceConfigProperties.DRIVER_CLASS_NAME.getKey() + " (Data context: "
 								+ dataContextId + ")")));
+
+		LOGGER.debug(() -> "Basic DataSource JDBC driver class name: " + driverClassName);
 
 		BasicDataSource ds = BasicDataSource.builder().url(url).driverClassName(driverClassName)
 				.username(configurationProperties.getConfigPropertyValue(DataSourceConfigProperties.USERNAME, null))
