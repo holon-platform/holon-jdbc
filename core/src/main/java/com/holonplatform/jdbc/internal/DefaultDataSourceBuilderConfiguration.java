@@ -71,9 +71,9 @@ public final class DefaultDataSourceBuilderConfiguration implements Serializable
 	/**
 	 * {@link Priority} based comparator.
 	 */
-	private static final Comparator<Object> PRIORITY_COMPARATOR = Comparator
-			.comparingInt(p -> p.getClass().isAnnotationPresent(Priority.class)
-					? p.getClass().getAnnotation(Priority.class).value() : DataSourceBuilder.DEFAULT_PRIORITY);
+	private static final Comparator<Object> PRIORITY_COMPARATOR = Comparator.comparingInt(
+			p -> p.getClass().isAnnotationPresent(Priority.class) ? p.getClass().getAnnotation(Priority.class).value()
+					: DataSourceBuilder.DEFAULT_PRIORITY);
 
 	/*
 	 * Empty private constructor: this class is intended only to provide constants ad utility methods.

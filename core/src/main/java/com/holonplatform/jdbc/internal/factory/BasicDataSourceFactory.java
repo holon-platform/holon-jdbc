@@ -75,8 +75,9 @@ public class BasicDataSourceFactory implements DataSourceFactory {
 		LOGGER.debug(() -> "Basic DataSource JDBC connection URL: " + url);
 
 		final Optional<DatabasePlatform> platform = Optional.ofNullable(DatabasePlatform.fromUrl(url));
-		
-		LOGGER.debug(() -> "Detected Database platform: " + platform.map(p -> p.name()).orElse("[Failed to auto detect"));
+
+		LOGGER.debug(
+				() -> "Detected Database platform: " + platform.map(p -> p.name()).orElse("[Failed to auto detect"));
 
 		final String driverClassName = configurationProperties.getConfigPropertyValue(
 				DataSourceConfigProperties.DRIVER_CLASS_NAME,
