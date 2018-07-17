@@ -162,17 +162,17 @@ The following *type names* are supported by default:
 
 * *`com.holonplatform.jdbc.BasicDataSource`*: Create `BasicDataSource` instances, to be used typically for testing purposes. It is a simple `DataSource` implementation, using the `java.sql.DriverManager` class and returning a new `java.sql.Connection` from every `getConnection` call. See <<BasicDataSource>>.
 
-* *`com.zaxxer.hikari.HikariDataSource`*: Create https://github.com/brettwooldridge/HikariCP[HikariCP] connection pooling `DataSource` instances. The _HikariCP_ library dependency must be available in classpath. All default configuration properties are supported, and additional Hikari-specific configuration properties can be specified using the `hikari` prefix before the actual property name, for example: `holon.datasource.*hikari*.connectionTimeout`.
+* *`com.zaxxer.hikari.HikariDataSource`*: Create https://github.com/brettwooldridge/HikariCP[HikariCP^] connection pooling `DataSource` instances. The _HikariCP_ library dependency must be available in classpath. All default configuration properties are supported, and additional Hikari-specific configuration properties can be specified using the `hikari` prefix before the actual property name, for example: `holon.datasource.*hikari*.connectionTimeout`.
 
-* *`org.apache.commons.dbcp2.BasicDataSource`*: Create http://commons.apache.org/proper/commons-dbcp/[Apache Commons DBCP 2] connection pooling `DataSource` instances. The _DBCP 2_ library dependency must be available in classpath. All default configuration properties are supported, and additional DBCP-specific configuration properties can be specified using the `dbcp` prefix before the actual property name, for example: `holon.datasource.*dbcp*.maxWaitMillis`.
+* *`org.apache.commons.dbcp2.BasicDataSource`*: Create http://commons.apache.org/proper/commons-dbcp/[Apache Commons DBCP 2^] connection pooling `DataSource` instances. The _DBCP 2_ library dependency must be available in classpath. All default configuration properties are supported, and additional DBCP-specific configuration properties can be specified using the `dbcp` prefix before the actual property name, for example: `holon.datasource.*dbcp*.maxWaitMillis`.
 
-* *`org.apache.tomcat.jdbc.pool.DataSource`*: Create https://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html[Tomcat JDBC] connection pooling `DataSource` instances. The _tomcat-jdbc_ library dependency must be available in classpath. All default configuration properties are supported, and additional Tomcat-specific configuration properties can be specified using the `tomcat` prefix before the actual property name, for example: `holon.datasource.*tomcat*.maxAge`.
+* *`org.apache.tomcat.jdbc.pool.DataSource`*: Create https://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html[Tomcat JDBC^] connection pooling `DataSource` instances. The _tomcat-jdbc_ library dependency must be available in classpath. All default configuration properties are supported, and additional Tomcat-specific configuration properties can be specified using the `tomcat` prefix before the actual property name, for example: `holon.datasource.*tomcat*.maxAge`.
 
 * *`JNDI`*: Obtain a `DataSource` using *JNDI*. The `jndi-name` configuration property is required to specify the JNDI name to which the `DataSource` is bound in the JNDI context.
 
 NOTE: To use a specific `DataSource` implementation, the corresponding classes must be available in classpath. So you have to ensure the required dependencies are declared for your project.
 
-For example, to use a https://github.com/brettwooldridge/HikariCP[HikariCP] pooling `DataSource` implementation, the `com.zaxxer.hikari.HikariDataSource` type can be specified:
+For example, to use a https://github.com/brettwooldridge/HikariCP[HikariCP^] pooling `DataSource` implementation, the `com.zaxxer.hikari.HikariDataSource` type can be specified:
 
 [source, text, subs=+quotes]
 ----

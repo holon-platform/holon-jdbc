@@ -211,7 +211,7 @@ So the `DataSource` bean instances can be obtained using dependency injection th
 include::{examplesdir}/com/holonplatform/jdbc/examples/ExampleSpringBoot1.java[tag=config,indent=0]
 ----
 
-To disable this auto-configuration feature the link:{apidir}/com/holonplatform/jdbc/spring/boot//DataSourcesAutoConfiguration.html[DataSourcesAutoConfiguration^] class can be excluded:
+To disable this auto-configuration feature the link:{apidir}/com/holonplatform/jdbc/spring/boot/DataSourcesAutoConfiguration.html[DataSourcesAutoConfiguration^] class can be excluded:
 
 [source, java]
 ----
@@ -228,7 +228,7 @@ If a _data context id_ is defined for multiple `DataSource` instances, the corre
 
 Furthermore, the `PlatformTransactionManager` bean name when _data context id_ is specified will be assigned using the pattern: `transactionManager_{dataContextId}`. So, for example, the `PlatformTransactionManager` bean created for the `test` _data context id_ will be named `transactionManager_test`.
 
-To disable this auto-configuration feature the link:{apidir}/com/holonplatform/jdbc/spring/boot//DataSourcesTransactionManagerAutoConfiguration.html[DataSourcesTransactionManagerAutoConfiguration^] class can be excluded:
+To disable this auto-configuration feature the link:{apidir}/com/holonplatform/jdbc/spring/boot/DataSourcesTransactionManagerAutoConfiguration.html[DataSourcesTransactionManagerAutoConfiguration^] class can be excluded:
 
 [source, java]
 ----

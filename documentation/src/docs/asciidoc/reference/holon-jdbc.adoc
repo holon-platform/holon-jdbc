@@ -94,5 +94,5 @@ The logger name for the *JDBC* module is `com.holonplatform.jdbc`.
 
 === Java
 
-The Holon Platform JDBC module requires https://www.java.com[Java] *8* or higher.
+The Holon Platform JDBC module requires https://www.java.com[Java^] *8* or higher.
 
