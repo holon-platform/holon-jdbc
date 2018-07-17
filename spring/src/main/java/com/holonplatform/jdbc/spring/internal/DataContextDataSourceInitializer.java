@@ -171,10 +171,13 @@ class DataContextDataSourceInitializer implements ApplicationListener<DataContex
 		SortedResourcesFactoryBean factory = new SortedResourcesFactoryBean(this.applicationContext, locations);
 		try {
 			factory.afterPropertiesSet();
-			List<Resource> resources = new ArrayList<>();
-			for (Resource resource : factory.getObject()) {
-				if (resource.exists()) {
-					resources.add(resource);
+			final List<Resource> resources = new ArrayList<>();
+			final Resource[] rs = factory.getObject();
+			if (rs != null) {
+				for (Resource resource : rs) {
+					if (resource.exists()) {
+						resources.add(resource);
+					}
 				}
 			}
 			return resources;
