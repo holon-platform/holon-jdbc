@@ -50,8 +50,8 @@ public class TestNoPropertiesConfig {
 	public void testDataSource() throws SQLException {
 		assertNotNull(dataSource);
 
-		// Spring boot default is tomcat datasource
-		assertTrue(dataSource instanceof org.apache.tomcat.jdbc.pool.DataSource);
+		// Spring boot 2 default is Hikari datasource
+		assertTrue(dataSource instanceof com.zaxxer.hikari.HikariDataSource);
 
 		try (Connection c = dataSource.getConnection()) {
 			assertNotNull(c);
