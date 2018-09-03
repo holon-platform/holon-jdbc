@@ -25,6 +25,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.holonplatform.core.datastore.transaction.Transaction;
 import com.holonplatform.core.datastore.transaction.TransactionConfiguration;
 import com.holonplatform.core.internal.utils.ObjectUtils;
+import com.holonplatform.jdbc.transaction.JdbcTransactionOptions;
 
 /**
  * Base {@link Transaction} implementation which uses a Spring {@link PlatformTransactionManager} to manage the actual
@@ -212,23 +213,24 @@ public abstract class SpringManagedTransaction implements Transaction {
 		if (transactionConfiguration == null) {
 			return Optional.empty();
 		}
-		return transactionConfiguration.getTransactionIsolation().map(i -> {
-			switch (i) {
-			case NONE:
-				return TransactionDefinition.ISOLATION_DEFAULT;
-			case READ_COMMITTED:
-				return TransactionDefinition.ISOLATION_READ_COMMITTED;
-			case READ_UNCOMMITTED:
-				return TransactionDefinition.ISOLATION_READ_UNCOMMITTED;
-			case REPEATABLE_READ:
-				return TransactionDefinition.ISOLATION_REPEATABLE_READ;
-			case SERIALIZABLE:
-				return TransactionDefinition.ISOLATION_SERIALIZABLE;
-			default:
-				break;
-			}
-			return null;
-		});
+		return transactionConfiguration.getTransactionOptions().filter(o -> o instanceof JdbcTransactionOptions)
+				.map(o -> (JdbcTransactionOptions) o).flatMap(o -> o.getTransactionIsolation()).map(i -> {
+					switch (i) {
+					case NONE:
+						return TransactionDefinition.ISOLATION_DEFAULT;
+					case READ_COMMITTED:
+						return TransactionDefinition.ISOLATION_READ_COMMITTED;
+					case READ_UNCOMMITTED:
+						return TransactionDefinition.ISOLATION_READ_UNCOMMITTED;
+					case REPEATABLE_READ:
+						return TransactionDefinition.ISOLATION_REPEATABLE_READ;
+					case SERIALIZABLE:
+						return TransactionDefinition.ISOLATION_SERIALIZABLE;
+					default:
+						break;
+					}
+					return null;
+				});
 	}
 
 }
