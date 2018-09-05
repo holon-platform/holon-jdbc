@@ -136,7 +136,7 @@ public abstract class SpringManagedTransaction implements Transaction {
 	 * @see com.holonplatform.core.datastore.transaction.Transaction#commit()
 	 */
 	@Override
-	public void commit() throws TransactionException {
+	public boolean commit() throws TransactionException {
 		final TransactionStatus tx = getTransactionStatus()
 				.orElseThrow(() -> new IllegalTransactionStatusException("the transaction is not active"));
 		if (tx.isCompleted()) {
@@ -147,8 +147,10 @@ public abstract class SpringManagedTransaction implements Transaction {
 			// check rollback only
 			if (isRollbackOnly()) {
 				getTransactionManager().rollback(tx);
+				return false;
 			} else {
 				getTransactionManager().commit(tx);
+				return true;
 			}
 		} catch (Exception e) {
 			throw new TransactionException("Failed to commit the transaction", e);
