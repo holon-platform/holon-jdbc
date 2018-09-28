@@ -49,6 +49,11 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, BeanClass
 	private DataSourceBuilder dataSourceBuilder;
 
 	/**
+	 * DataSource instance
+	 */
+	private DataSource dataSource;
+
+	/**
 	 * Constructor
 	 * @param configuration Configuration properties
 	 */
@@ -81,10 +86,21 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, BeanClass
 	 */
 	@Override
 	public DataSource getObject() throws Exception {
-		if (dataSourceBuilder == null) {
-			throw new BeanInitializationException("DataSourceBuilder not initialized");
+		return getDataSource();
+	}
+
+	/**
+	 * Get the current {@link DataSource} instance, or build it using the configured builder.
+	 * @return The {@link DataSource} instance
+	 */
+	private DataSource getDataSource() {
+		if (dataSource == null) {
+			if (dataSourceBuilder == null) {
+				throw new BeanInitializationException("DataSourceBuilder not initialized");
+			}
+			dataSource = dataSourceBuilder.build(configuration);
 		}
-		return dataSourceBuilder.build(configuration);
+		return dataSource;
 	}
 
 	/*
