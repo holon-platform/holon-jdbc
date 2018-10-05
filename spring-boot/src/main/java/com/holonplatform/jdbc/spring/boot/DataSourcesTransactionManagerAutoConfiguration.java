@@ -27,8 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.AbstractTransactionManagementConfiguration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.holonplatform.jdbc.spring.boot.internal.DataSourcesTransactionManagerAutoConfigurationRegistrar;
 
@@ -38,17 +36,18 @@ import com.holonplatform.jdbc.spring.boot.internal.DataSourcesTransactionManager
  * 
  * @since 5.0.0
  */
+@Configuration
 @ConditionalOnClass(PlatformTransactionManager.class)
 @AutoConfigureBefore(DataSourceTransactionManagerAutoConfiguration.class)
 @AutoConfigureAfter(DataSourcesAutoConfiguration.class)
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 public class DataSourcesTransactionManagerAutoConfiguration {
 
-	@ConditionalOnMissingBean({ AbstractTransactionManagementConfiguration.class, PlatformTransactionManager.class })
+	@ConditionalOnMissingBean(PlatformTransactionManager.class)
 	@Configuration
-	@EnableTransactionManagement(proxyTargetClass = true)
 	@Import(DataSourcesTransactionManagerAutoConfigurationRegistrar.class)
-	protected static class TransactionManagementConfiguration {
+	static class TransactionManagementConfiguration {
 
 	}
+
 }
