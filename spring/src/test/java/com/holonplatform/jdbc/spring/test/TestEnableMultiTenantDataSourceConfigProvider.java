@@ -15,8 +15,8 @@
  */
 package com.holonplatform.jdbc.spring.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,13 +25,13 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.holonplatform.core.tenancy.TenantResolver;
 import com.holonplatform.jdbc.DataSourceBuilder;
@@ -39,7 +39,7 @@ import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.MultiTenantDataSource;
 import com.holonplatform.jdbc.TenantDataSourceProvider;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestEnableMultiTenantDataSourceConfigProvider.Config.class)
 public class TestEnableMultiTenantDataSourceConfigProvider {
 

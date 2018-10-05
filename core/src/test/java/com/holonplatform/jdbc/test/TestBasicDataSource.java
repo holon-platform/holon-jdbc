@@ -15,8 +15,8 @@
  */
 package com.holonplatform.jdbc.test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,7 +24,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.holonplatform.jdbc.BasicDataSource;
 import com.holonplatform.jdbc.DatabasePlatform;

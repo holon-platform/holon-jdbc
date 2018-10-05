@@ -15,20 +15,20 @@
  */
 package com.holonplatform.jdbc.spring.test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Properties;
-import java.util.concurrent.Callable;
 
 import javax.sql.DataSource;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.FactoryBean;
 
-import com.holonplatform.core.internal.utils.TestUtils;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.spring.SpringDataSourceConfigProperties;
 import com.holonplatform.jdbc.spring.internal.DataSourceFactoryBean;
+import com.holonplatform.test.TestUtils;
 
 public class TestBase {
 
@@ -42,20 +42,16 @@ public class TestBase {
 		SpringDataSourceConfigProperties cfg = SpringDataSourceConfigProperties.builder().withPropertySource(props)
 				.build();
 
-		Assert.assertTrue(cfg.getConfigPropertyValue(SpringDataSourceConfigProperties.INITIALIZE, false));
+		assertTrue(cfg.getConfigPropertyValue(SpringDataSourceConfigProperties.INITIALIZE, false));
 
 	}
 
 	@Test
 	public void testFactoryBean() {
-		TestUtils.expectedException(BeanInitializationException.class, new Callable<DataSource>() {
-
-			@Override
-			public DataSource call() throws Exception {
-				FactoryBean<DataSource> fb = new DataSourceFactoryBean(
-						SpringDataSourceConfigProperties.builder().withPropertySource(new Properties()).build());
-				return fb.getObject();
-			}
+		TestUtils.expectedException(BeanInitializationException.class, () -> {
+			FactoryBean<DataSource> fb = new DataSourceFactoryBean(
+					SpringDataSourceConfigProperties.builder().withPropertySource(new Properties()).build());
+			fb.getObject();
 		});
 	}
 

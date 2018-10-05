@@ -15,9 +15,9 @@
  */
 package com.holonplatform.jdbc.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,14 +25,14 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.holonplatform.core.internal.utils.ClassUtils;
-import com.holonplatform.core.internal.utils.TestUtils;
 import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.DatabasePlatform;
 import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
+import com.holonplatform.test.TestUtils;
 import com.zaxxer.hikari.HikariConfigMXBean;
 import com.zaxxer.hikari.HikariDataSource;
 
