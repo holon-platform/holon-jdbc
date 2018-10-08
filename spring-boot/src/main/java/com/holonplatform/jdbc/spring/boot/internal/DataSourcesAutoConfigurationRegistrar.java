@@ -171,6 +171,7 @@ public class DataSourcesAutoConfigurationRegistrar implements ImportBeanDefiniti
 		public AvoidDataSourceInitializePropertySource() {
 			super("holon_dataSources_autoConfig_propertySource", new Properties());
 			getSource().put("spring.datasource.initialize", "false");
+			getSource().put("spring.datasource.initialization-mode", "NEVER");
 		}
 
 		@Override
