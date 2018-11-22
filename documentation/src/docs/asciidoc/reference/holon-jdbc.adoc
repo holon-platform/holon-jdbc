@@ -72,9 +72,11 @@ See link:index.html#obtain-the-platform-artifacts[Obtain the platform artifacts]
 [[WhatsNew52x]]
 == What's new in version 5.2.x
 
-The link:{apidir}/com/holonplatform/jdbc/transaction/JdbcTransactionOptions.html[JdbcTransactionOptions^] API was introduced to provide JDBC transaction configuration options.
+* The link:{apidir}/com/holonplatform/jdbc/transaction/JdbcTransactionOptions.html[JdbcTransactionOptions^] API was introduced to provide JDBC transaction configuration options.
 
-The transaction _isolation_ level can be specified using the link:{apidir}/com/holonplatform/jdbc/transaction/TransactionIsolation.html[TransactionIsolation^] enumeration.
+* The transaction _isolation_ level can be specified using the link:{apidir}/com/holonplatform/jdbc/transaction/TransactionIsolation.html[TransactionIsolation^] enumeration.
+
+* Support for JDK 9+ module system using `Automatic-Module-Name`.
 
 [[WhatsNew51x]]
 == What's new in version 5.1.x
