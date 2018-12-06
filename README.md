@@ -15,7 +15,42 @@ See the module [documentation](https://docs.holon-platform.com/current/reference
 
 Just like any other platform module, this artifact is part of the [Holon Platform](https://holon-platform.com) ecosystem, but can be also used as a _stand-alone_ library.
 
-See the [platform documentation](https://docs.holon-platform.com/current/reference) for further details.
+See [Getting started](#getting-started) and the [platform documentation](https://docs.holon-platform.com/current/reference) for further details.
+
+## At-a-glance overview
+
+_JDBC DataSource configuration:_
+```java
+DataSourceConfigProperties config = DataSourceConfigProperties.builder()
+	.withPropertySource("datasource.properties").build();
+
+DataSource dataSource = DataSourceBuilder.create().build(config);
+```
+
+_JDBC DataSource builder:_
+```java
+DataSource dataSource = DataSourceBuilder.builder() 
+	.type(DataSourceType.HIKARICP)
+	.url("jdbc:h2:mem:testdb")
+	.username("sa") 
+	.minPoolSize(5)
+	.withInitScriptResource("init.sql")
+	.build();
+```
+
+_Spring Boot multiple DataSource auto-configuration:_
+```yaml
+holon: 
+  datasource:
+    one:
+      url: "jdbc:h2:mem:testdb1"
+      username: "sa"
+    two:
+      url: "jdbc:h2:mem:testdb2"
+      username: "sa"
+```
+
+See the [module documentation](https://docs.holon-platform.com/current/reference/holon-jdbc.html) for the user guide and a full set of examples.
 
 ## Code structure
 
