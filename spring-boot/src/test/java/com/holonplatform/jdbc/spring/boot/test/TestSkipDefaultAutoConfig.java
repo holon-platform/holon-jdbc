@@ -33,7 +33,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 
-
 @SpringBootTest
 @ActiveProfiles("test3")
 public class TestSkipDefaultAutoConfig {

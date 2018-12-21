@@ -33,7 +33,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.holonplatform.jdbc.spring.boot.DataSourcesAutoConfiguration;
 
-
 @SpringBootTest
 @ActiveProfiles("test1")
 public class TestExcludeAutoConfig {

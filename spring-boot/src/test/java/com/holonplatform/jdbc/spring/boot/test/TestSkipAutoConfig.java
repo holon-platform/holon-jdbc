@@ -35,7 +35,6 @@ import org.springframework.test.context.ActiveProfiles;
 import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
 import com.zaxxer.hikari.HikariDataSource;
 
-
 @SpringBootTest
 @ActiveProfiles("test4")
 public class TestSkipAutoConfig {

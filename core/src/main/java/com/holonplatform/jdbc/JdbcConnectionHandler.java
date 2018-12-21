@@ -42,15 +42,15 @@ public interface JdbcConnectionHandler {
 	 */
 	public enum ConnectionType {
 
-		/**
-		 * The connection is used to initialize the underlying connection consumer
-		 */
-		INIT,
+	/**
+	 * The connection is used to initialize the underlying connection consumer
+	 */
+	INIT,
 
-		/**
-		 * The connection is used to perform normal JDBC calls by the underlying connection consumer
-		 */
-		DEFAULT;
+	/**
+	 * The connection is used to perform normal JDBC calls by the underlying connection consumer
+	 */
+	DEFAULT;
 
 	}
 
