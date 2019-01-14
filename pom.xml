@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -58,7 +60,7 @@
 		<bintray.package>holon-jdbc</bintray.package>
 
 		<!-- Holon core -->
-		<holon.core.version>5.2.0-rc2</holon.core.version>
+		<holon.core.version>5.2.0</holon.core.version>
 
 		<!-- HikariCP -->
 		<hikaricp.version>3.2.0</hikaricp.version>
