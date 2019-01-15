@@ -1,6 +1,6 @@
 # Holon platform JDBC module
 
-> Latest release: [5.1.4](#obtain-the-artifacts)
+> Latest release: [5.2.0](#obtain-the-artifacts)
 
 This is the __JDBC__ module of the [Holon Platform](https://holon-platform.com), which provides _Java DataBase Connectivity_ support, dealing with `javax.sql.DataSource` configuration and management in single or multiple persistence source enviroments.
 
@@ -66,9 +66,9 @@ The Holon Platform is built using __Java 8__, so you need a JRE/JDK version 8 or
 
 See [releases](https://github.com/holon-platform/holon-jdbc/releases) for the available releases. Each release tag provides a link to the closed issues.
 
-#### 5.1.x release notes
+#### 5.2.x release notes
 
-See [What's new in version 5.1.x](https://docs.holon-platform.com/current/reference/holon-jdbc.html#WhatsNew51x) to learn about the new features and API operations of the 5.1 minor release.
+See [What's new in version 5.2.x](https://docs.holon-platform.com/current/reference/holon-jdbc.html#WhatsNew52x) to learn about the new features and API operations of the 5.2 minor release.
 
 ### Obtain the artifacts
 
@@ -82,7 +82,7 @@ _Maven BOM:_
     <dependency>
         <groupId>com.holon-platform.jdbc</groupId>
         <artifactId>holon-jdbc-bom</artifactId>
-        <version>5.1.4</version>
+        <version>5.2.0</version>
         <type>pom</type>
         <scope>import</scope>
     </dependency>
