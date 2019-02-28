@@ -32,7 +32,6 @@ import com.holonplatform.jdbc.DataSourceBuilder;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.DatabasePlatform;
 import com.holonplatform.jdbc.internal.DefaultBasicDataSource;
-import com.holonplatform.test.TestUtils;
 import com.zaxxer.hikari.HikariConfigMXBean;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -40,8 +39,6 @@ public class TestDataSourceBuilder {
 
 	@Test
 	public void testBase() {
-		TestUtils.checkEnum(DatabasePlatform.class);
-
 		assertNull(DatabasePlatform.fromUrl(null));
 
 		DatabasePlatform p = DatabasePlatform.fromUrl("jdbc:h2:mem:testdb");

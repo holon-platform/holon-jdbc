@@ -15,6 +15,7 @@
  */
 package com.holonplatform.jdbc.spring.test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
@@ -28,7 +29,6 @@ import org.springframework.beans.factory.FactoryBean;
 import com.holonplatform.jdbc.DataSourceConfigProperties;
 import com.holonplatform.jdbc.spring.SpringDataSourceConfigProperties;
 import com.holonplatform.jdbc.spring.internal.DataSourceFactoryBean;
-import com.holonplatform.test.TestUtils;
 
 public class TestBase {
 
@@ -48,7 +48,7 @@ public class TestBase {
 
 	@Test
 	public void testFactoryBean() {
-		TestUtils.expectedException(BeanInitializationException.class, () -> {
+		assertThrows(BeanInitializationException.class, () -> {
 			FactoryBean<DataSource> fb = new DataSourceFactoryBean(
 					SpringDataSourceConfigProperties.builder().withPropertySource(new Properties()).build());
 			fb.getObject();
