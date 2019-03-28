@@ -68,7 +68,7 @@
 		<tomcat-jdbc.version>9.0.16</tomcat-jdbc.version>
 
 		<!-- ByteBuddy -->
-		<bytebuddy.version>1.9.10</bytebuddy.version>
+		<bytebuddy.version>1.9.12</bytebuddy.version>
 
 		<!-- H2 (test) -->
 		<h2.version>1.4.198</h2.version>
