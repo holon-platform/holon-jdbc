@@ -53,10 +53,13 @@ public class SQLScriptUtils {
 	 */
 	private static final String BLOCK_COMMENT_END = "*/";
 
+	private SQLScriptUtils() {
+	}
+
 	/**
 	 * Execute given SQL script using provided {@link Connection}.
 	 * @param connection Connection on which to execute the script (not null)
-	 * @param script SQL script not null
+	 * @param script     SQL script not null
 	 * @throws IOException If an execution error occurred
 	 */
 	public static void executeSqlScript(Connection connection, String script) throws IOException {
@@ -133,7 +136,7 @@ public class SQLScriptUtils {
 					continue;
 				} else if (script.startsWith(COMMENT_PREFIX, i)) {
 					// single line comment
-					int nlIdx = script.indexOf("\n", i);
+					int nlIdx = script.indexOf('\n', i);
 					if (nlIdx > i) {
 						i = nlIdx;
 						continue;

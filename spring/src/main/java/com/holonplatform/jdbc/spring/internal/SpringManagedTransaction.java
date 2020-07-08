@@ -28,14 +28,17 @@ import com.holonplatform.core.internal.utils.ObjectUtils;
 import com.holonplatform.jdbc.transaction.JdbcTransactionOptions;
 
 /**
- * Base {@link Transaction} implementation which uses a Spring {@link PlatformTransactionManager} to manage the actual
- * transaction.
+ * Base {@link Transaction} implementation which uses a Spring
+ * {@link PlatformTransactionManager} to manage the actual transaction.
  * 
- * {@link #startTransaction()} and {@link #endTransaction()} methods should be used to handle transaction lifecycle.
+ * {@link #startTransaction()} and {@link #endTransaction()} methods should be
+ * used to handle transaction lifecycle.
  *
  * @since 5.1.0
  */
 public abstract class SpringManagedTransaction implements Transaction {
+
+	private static final String MSG_TX_NOT_ACTIVE = "The transaction is not active";
 
 	/**
 	 * Transaction manager
@@ -54,8 +57,9 @@ public abstract class SpringManagedTransaction implements Transaction {
 
 	/**
 	 * Constructor.
-	 * @param transactionManager The {@link PlatformTransactionManager} to use (not null)
-	 * @param configuration The transaction configuration (not null)
+	 * @param transactionManager The {@link PlatformTransactionManager} to use (not
+	 *                           null)
+	 * @param configuration      The transaction configuration (not null)
 	 */
 	public SpringManagedTransaction(PlatformTransactionManager transactionManager,
 			TransactionConfiguration configuration) {
@@ -84,7 +88,8 @@ public abstract class SpringManagedTransaction implements Transaction {
 
 	/**
 	 * Get the current {@link TransactionStatus}, if available.
-	 * @return the current transaction status if the transaction has been started, an empty Optional otherwise
+	 * @return the current transaction status if the transaction has been started,
+	 *         an empty Optional otherwise
 	 */
 	protected Optional<TransactionStatus> getTransactionStatus() {
 		return Optional.ofNullable(transactionStatus);
@@ -101,9 +106,7 @@ public abstract class SpringManagedTransaction implements Transaction {
 
 		// transaction definition
 		DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
-		getIsolationLevel(getConfiguration()).ifPresent(i -> {
-			definition.setIsolationLevel(i);
-		});
+		getIsolationLevel(getConfiguration()).ifPresent(i -> definition.setIsolationLevel(i));
 
 		// start transaction
 		transactionStatus = getTransactionManager().getTransaction(definition);
@@ -133,12 +136,13 @@ public abstract class SpringManagedTransaction implements Transaction {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.holonplatform.core.datastore.transaction.Transaction#commit()
 	 */
 	@Override
 	public boolean commit() throws TransactionException {
 		final TransactionStatus tx = getTransactionStatus()
-				.orElseThrow(() -> new IllegalTransactionStatusException("the transaction is not active"));
+				.orElseThrow(() -> new IllegalTransactionStatusException(MSG_TX_NOT_ACTIVE));
 		if (tx.isCompleted()) {
 			throw new IllegalTransactionStatusException(
 					"Cannot commit the transaction: the transaction is already completed");
@@ -159,12 +163,13 @@ public abstract class SpringManagedTransaction implements Transaction {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.holonplatform.core.datastore.transaction.Transaction#rollback()
 	 */
 	@Override
 	public void rollback() throws TransactionException {
 		final TransactionStatus tx = getTransactionStatus()
-				.orElseThrow(() -> new IllegalTransactionStatusException("the transaction is not active"));
+				.orElseThrow(() -> new IllegalTransactionStatusException(MSG_TX_NOT_ACTIVE));
 		if (tx.isCompleted()) {
 			throw new IllegalTransactionStatusException(
 					"Cannot commit the transaction: the transaction is already completed");
@@ -178,7 +183,10 @@ public abstract class SpringManagedTransaction implements Transaction {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.holonplatform.core.internal.datastore.transaction.AbstractTransaction#isCompleted()
+	 * 
+	 * @see
+	 * com.holonplatform.core.internal.datastore.transaction.AbstractTransaction#
+	 * isCompleted()
 	 */
 	@Override
 	public boolean isCompleted() {
@@ -187,27 +195,31 @@ public abstract class SpringManagedTransaction implements Transaction {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.holonplatform.core.datastore.transaction.Transaction#setRollbackOnly()
+	 * 
+	 * @see
+	 * com.holonplatform.core.datastore.transaction.Transaction#setRollbackOnly()
 	 */
 	@Override
 	public void setRollbackOnly() {
-		getTransactionStatus().orElseThrow(() -> new IllegalTransactionStatusException("the transaction is not active"))
+		getTransactionStatus().orElseThrow(() -> new IllegalTransactionStatusException(MSG_TX_NOT_ACTIVE))
 				.setRollbackOnly();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.holonplatform.core.datastore.transaction.Transaction#isRollbackOnly()
+	 * 
+	 * @see
+	 * com.holonplatform.core.datastore.transaction.Transaction#isRollbackOnly()
 	 */
 	@Override
 	public boolean isRollbackOnly() {
-		return getTransactionStatus()
-				.orElseThrow(() -> new IllegalTransactionStatusException("the transaction is not active"))
+		return getTransactionStatus().orElseThrow(() -> new IllegalTransactionStatusException(MSG_TX_NOT_ACTIVE))
 				.isRollbackOnly();
 	}
 
 	/**
-	 * Get the transaction isolation level according to given {@link TransactionConfiguration}.
+	 * Get the transaction isolation level according to given
+	 * {@link TransactionConfiguration}.
 	 * @param transactionConfiguration transaction configuration
 	 * @return Optional isolation level
 	 */
