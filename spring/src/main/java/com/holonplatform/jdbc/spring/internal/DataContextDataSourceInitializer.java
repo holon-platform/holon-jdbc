@@ -95,8 +95,8 @@ class DataContextDataSourceInitializer implements ApplicationListener<DataContex
 		if (!scripts.isEmpty()) {
 			runScripts(scripts, dataSource);
 			try {
-				this.applicationContext.publishEvent(new DataContextDataSourceInitializedEvent(dataSource,
-						getDataContextId().orElse(DEFAULT_DATA_CONTEXT_ID)));
+//				this.applicationContext.publishEvent(new DataContextDataSourceInitializedEvent(dataSource,
+//						getDataContextId().orElse(DEFAULT_DATA_CONTEXT_ID)));
 				// The listener might not be registered yet, so don't rely on it.
 				if (!this.initialized) {
 					runDataScripts(dataSource);

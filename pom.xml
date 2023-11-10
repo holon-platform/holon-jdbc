@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.holon-platform</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.1.6</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<groupId>com.holon-platform.jdbc</groupId>
@@ -55,10 +55,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Holon core -->
-		<holon.core.version>5.5.0</holon.core.version>
+		<holon.core.version>5.6.0</holon.core.version>
 
 		<!-- HikariCP -->
-		<hikaricp.version>3.4.5</hikaricp.version>
+		<hikaricp.version>5.0.1</hikaricp.version>
 		<!-- Commons DBCP -->
 		<commons-dbcp.version>2.7.0</commons-dbcp.version>
 		<!-- Tomcat pool -->
