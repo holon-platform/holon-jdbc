@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.BeanNotOfRequiredTypeException;

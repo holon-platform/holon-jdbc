@@ -72,7 +72,7 @@ public class TestEnableMultiDataSource {
 		try (Connection c = dataSource1.getConnection()) {
 			assertNotNull(c);
 
-			try (ResultSet rs = c.createStatement().executeQuery("select str from test1 where key=1")) {
+			try (ResultSet rs = c.createStatement().executeQuery("select str from test1 where id=1")) {
 				rs.next();
 				assertEquals("One", rs.getString(1));
 			}
@@ -81,7 +81,7 @@ public class TestEnableMultiDataSource {
 		try (Connection c = dataSource2.getConnection()) {
 			assertNotNull(c);
 
-			try (ResultSet rs = c.createStatement().executeQuery("select str from test2 where key=2")) {
+			try (ResultSet rs = c.createStatement().executeQuery("select str from test2 where id=2")) {
 				rs.next();
 				assertEquals("Two", rs.getString(1));
 			}

@@ -73,7 +73,7 @@ public class TestMultiTenantDataSource {
 		try (Connection c = ds.getConnection()) {
 			assertNotNull(c);
 
-			try (ResultSet rs = c.createStatement().executeQuery("select str from test1 where key=1")) {
+			try (ResultSet rs = c.createStatement().executeQuery("select str from test1 where id=1")) {
 				rs.next();
 				assertEquals("One", rs.getString(1));
 			}
@@ -88,7 +88,7 @@ public class TestMultiTenantDataSource {
 			try (Connection c = ds.getConnection()) {
 				assertNotNull(c);
 
-				try (ResultSet rs = c.createStatement().executeQuery("select str from test2 where key=2")) {
+				try (ResultSet rs = c.createStatement().executeQuery("select str from test2 where id=2")) {
 					rs.next();
 					assertEquals("Two", rs.getString(1));
 				}
@@ -105,7 +105,7 @@ public class TestMultiTenantDataSource {
 			try (Connection c = ds.getConnection()) {
 				assertNotNull(c);
 
-				try (ResultSet rs = c.createStatement().executeQuery("select str from test2 where key=2")) {
+				try (ResultSet rs = c.createStatement().executeQuery("select str from test2 where id=2")) {
 					rs.next();
 					assertEquals("Two", rs.getString(1));
 				}
@@ -122,7 +122,7 @@ public class TestMultiTenantDataSource {
 			try (Connection c = ds.getConnection()) {
 				assertNotNull(c);
 
-				try (ResultSet rs = c.createStatement().executeQuery("select str from test3 where key=3")) {
+				try (ResultSet rs = c.createStatement().executeQuery("select str from test3 where id=3")) {
 					rs.next();
 					assertEquals("Three", rs.getString(1));
 				}

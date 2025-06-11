@@ -179,7 +179,7 @@ public class DefaultMultiTenantDataSource implements MultiTenantDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.DataSource#getConnection()
+	 * @see jakarta.sql.DataSource#getConnection()
 	 */
 	@Override
 	public Connection getConnection() throws SQLException {
@@ -188,7 +188,7 @@ public class DefaultMultiTenantDataSource implements MultiTenantDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.DataSource#getConnection(java.lang.String, java.lang.String)
+	 * @see jakarta.sql.DataSource#getConnection(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Connection getConnection(String username, String password) throws SQLException {
@@ -197,7 +197,7 @@ public class DefaultMultiTenantDataSource implements MultiTenantDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.CommonDataSource#getLogWriter()
+	 * @see jakarta.sql.CommonDataSource#getLogWriter()
 	 */
 	@Override
 	public PrintWriter getLogWriter() throws SQLException {
@@ -206,7 +206,7 @@ public class DefaultMultiTenantDataSource implements MultiTenantDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.CommonDataSource#setLogWriter(java.io.PrintWriter)
+	 * @see jakarta.sql.CommonDataSource#setLogWriter(java.io.PrintWriter)
 	 */
 	@Override
 	public void setLogWriter(PrintWriter out) throws SQLException {
@@ -215,7 +215,7 @@ public class DefaultMultiTenantDataSource implements MultiTenantDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.CommonDataSource#setLoginTimeout(int)
+	 * @see jakarta.sql.CommonDataSource#setLoginTimeout(int)
 	 */
 	@Override
 	public void setLoginTimeout(int seconds) throws SQLException {
@@ -224,7 +224,7 @@ public class DefaultMultiTenantDataSource implements MultiTenantDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.CommonDataSource#getLoginTimeout()
+	 * @see jakarta.sql.CommonDataSource#getLoginTimeout()
 	 */
 	@Override
 	public int getLoginTimeout() throws SQLException {
@@ -233,7 +233,7 @@ public class DefaultMultiTenantDataSource implements MultiTenantDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.CommonDataSource#getParentLogger()
+	 * @see jakarta.sql.CommonDataSource#getParentLogger()
 	 */
 	@Override
 	public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {

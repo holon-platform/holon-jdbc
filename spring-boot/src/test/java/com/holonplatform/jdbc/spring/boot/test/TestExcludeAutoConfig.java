@@ -32,13 +32,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.holonplatform.jdbc.spring.boot.DataSourcesAutoConfiguration;
+import com.holonplatform.jdbc.spring.boot.DataSourcesTransactionManagerAutoConfiguration;
 
 @SpringBootTest
 @ActiveProfiles("test1")
 public class TestExcludeAutoConfig {
 
 	@Configuration
-	@EnableAutoConfiguration(exclude = DataSourcesAutoConfiguration.class)
+	@EnableAutoConfiguration(exclude = { DataSourcesAutoConfiguration.class,
+			DataSourcesTransactionManagerAutoConfiguration.class })
 	protected static class Config {
 
 	}

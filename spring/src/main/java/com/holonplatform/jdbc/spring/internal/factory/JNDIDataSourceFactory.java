@@ -15,7 +15,7 @@
  */
 package com.holonplatform.jdbc.spring.internal.factory;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 

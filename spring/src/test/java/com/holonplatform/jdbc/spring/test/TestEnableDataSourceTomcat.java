@@ -60,7 +60,7 @@ public class TestEnableDataSourceTomcat {
 		try (Connection c = dataSource.getConnection()) {
 			assertNotNull(c);
 
-			try (ResultSet rs = c.createStatement().executeQuery("select str from testx where key=1")) {
+			try (ResultSet rs = c.createStatement().executeQuery("select str from testx where id=1")) {
 				rs.next();
 				assertEquals("One", rs.getString(1));
 			}

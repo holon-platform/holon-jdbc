@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 import javax.sql.DataSource;
 
 import org.apache.tomcat.jdbc.pool.PoolConfiguration;

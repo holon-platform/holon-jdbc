@@ -17,6 +17,7 @@ package com.holonplatform.jdbc.internal;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -148,10 +149,18 @@ public class DefaultBasicDataSource implements BasicDataSource {
 	public void setDriverClass(Class<? extends Driver> driverClass) {
 		ObjectUtils.argumentNotNull(driverClass, "Driver class must be not null");
 		try {
-			this.driver = driverClass.newInstance();
+			this.driver = driverClass.getDeclaredConstructor().newInstance();
 		} catch (InstantiationException e) {
 			throw new IllegalStateException("Failed to load JDBC driver class: " + driverClass.getName(), e);
 		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("Failed to load JDBC driver class: " + driverClass.getName(), e);
+		} catch (IllegalArgumentException e) {
+			throw new IllegalStateException("Failed to load JDBC driver class: " + driverClass.getName(), e);
+		} catch (InvocationTargetException e) {
+			throw new IllegalStateException("Failed to load JDBC driver class: " + driverClass.getName(), e);
+		} catch (NoSuchMethodException e) {
+			throw new IllegalStateException("Failed to load JDBC driver class: " + driverClass.getName(), e);
+		} catch (SecurityException e) {
 			throw new IllegalStateException("Failed to load JDBC driver class: " + driverClass.getName(), e);
 		}
 		LOGGER.debug(() -> "Loaded JDBC driver: " + driverClass.getName());
@@ -217,7 +226,7 @@ public class DefaultBasicDataSource implements BasicDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.CommonDataSource#getParentLogger()
+	 * @see jakarta.sql.CommonDataSource#getParentLogger()
 	 */
 	@Override
 	public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
@@ -249,7 +258,7 @@ public class DefaultBasicDataSource implements BasicDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.DataSource#getConnection()
+	 * @see jakarta.sql.DataSource#getConnection()
 	 */
 	@Override
 	public Connection getConnection() throws SQLException {
@@ -258,7 +267,7 @@ public class DefaultBasicDataSource implements BasicDataSource {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.sql.DataSource#getConnection(java.lang.String, java.lang.String)
+	 * @see jakarta.sql.DataSource#getConnection(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Connection getConnection(String username, String password) throws SQLException {
@@ -274,7 +283,8 @@ public class DefaultBasicDataSource implements BasicDataSource {
 	}
 
 	/**
-	 * Get a connection from Driver, using connection properties and including the given username and password, if any.
+	 * Get a connection from Driver, using connection properties and including the given username and
+	 * password, if any.
 	 * @param username Connection username
 	 * @param password Connection password
 	 * @return obtained Connection

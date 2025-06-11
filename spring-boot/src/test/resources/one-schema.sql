@@ -1,4 +1,4 @@
 CREATE TABLE itest1 (
-	 key bigint primary key, 
+	 keycode bigint primary key, 
 	 str varchar(100)
 );

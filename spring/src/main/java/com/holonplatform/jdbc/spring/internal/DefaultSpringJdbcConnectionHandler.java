@@ -38,7 +38,7 @@ public class DefaultSpringJdbcConnectionHandler implements SpringJdbcConnectionH
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.holonplatform.jdbc.JdbcConnectionHandler#getConnection(javax.sql.DataSource,
+	 * @see com.holonplatform.jdbc.JdbcConnectionHandler#getConnection(jakarta.sql.DataSource,
 	 * com.holonplatform.jdbc.JdbcConnectionHandler.ConnectionType)
 	 */
 	@Override
@@ -50,7 +50,7 @@ public class DefaultSpringJdbcConnectionHandler implements SpringJdbcConnectionH
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.holonplatform.jdbc.JdbcConnectionHandler#releaseConnection(java.sql.Connection, javax.sql.DataSource,
+	 * @see com.holonplatform.jdbc.JdbcConnectionHandler#releaseConnection(java.sql.Connection, jakarta.sql.DataSource,
 	 * com.holonplatform.jdbc.JdbcConnectionHandler.ConnectionType)
 	 */
 	@Override

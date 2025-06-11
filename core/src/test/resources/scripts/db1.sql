@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS test1 (
-	 key bigint primary key, 
+	 id bigint primary key, 
 	 str varchar(100)
 );
 

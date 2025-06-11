@@ -84,7 +84,7 @@ public class TestEnableMultiTenantDataSourceConfigProvider {
 			try (Connection c = dataSource.getConnection()) {
 				assertNotNull(c);
 
-				try (ResultSet rs = c.createStatement().executeQuery("select str from test1 where key=1")) {
+				try (ResultSet rs = c.createStatement().executeQuery("select str from test1 where id=1")) {
 					rs.next();
 					assertEquals("One", rs.getString(1));
 				}

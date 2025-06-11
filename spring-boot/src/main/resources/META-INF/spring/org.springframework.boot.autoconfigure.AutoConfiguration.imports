@@ -1,0 +1,2 @@
+com.holonplatform.jdbc.spring.boot.DataSourcesAutoConfiguration
+com.holonplatform.jdbc.spring.boot.DataSourcesTransactionManagerAutoConfiguration

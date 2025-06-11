@@ -17,30 +17,30 @@ package com.holonplatform.jdbc.spring.boot;
 
 import javax.sql.DataSource;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.Ordered;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.holonplatform.jdbc.spring.boot.internal.DataSourcesTransactionManagerAutoConfigurationRegistrar;
 
 /**
- * Spring boot auto-configuration to register a {@link PlatformTransactionManager} bound to every {@link DataSource}
- * bean registered using <code>holon.datasource.*</code> configuration properties.
+ * Spring boot auto-configuration to register a {@link PlatformTransactionManager} bound to every
+ * {@link DataSource} bean registered using <code>holon.datasource.*</code> configuration
+ * properties.
  * 
  * @since 5.0.0
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(PlatformTransactionManager.class)
 @AutoConfigureBefore(DataSourceTransactionManagerAutoConfiguration.class)
 @AutoConfigureAfter(DataSourcesAutoConfiguration.class)
-@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
+// @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 public class DataSourcesTransactionManagerAutoConfiguration {
 
 	@ConditionalOnMissingBean(PlatformTransactionManager.class)
